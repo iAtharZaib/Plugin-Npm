@@ -47,7 +47,7 @@ const FloatingRatingWrapped = ({lang = 1, top = iconPosition}) => {
           onClose={() => setStep(1)}
         />
       ) : (
-        <ProvideFeedback onClose={() => setStep(1)} lang={lang} />
+        <ProvideFeedback onClose={() => setStep(1)}/>
       )}
     </View>
   );
