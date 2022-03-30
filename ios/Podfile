@@ -1,0 +1,42 @@
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+platform :ios, '11.0'
+permissions_path = '../node_modules/react-native-permissions/ios'
+
+pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
+
+target 'RatingExample' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
+
+  target 'RatingExampleTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable the next line.
+  use_flipper!
+  post_install do |installer|
+    flipper_post_install(installer)
+  
+    installer.pods_project.targets.each do |target|
+      if target.name == "React-Core.common-AccessibilityResources"
+        target.remove_from_project
+      end
+    end
+  end
+
+  post_install do |installer|
+    react_native_post_install(installer)
+    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+  end
+end
