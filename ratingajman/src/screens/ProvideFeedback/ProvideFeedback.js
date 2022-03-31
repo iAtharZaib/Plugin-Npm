@@ -1079,8 +1079,12 @@ useEffect(() => {
         ]}>
         <TouchableOpacity
             style={[styles.feedbackButton,{
-              // left:  languageID != 1 && Platform.OS == 'ios'  ? undefined : width * -0.075,
-              right: languageID != 1 && Platform.OS == 'ios'  ?  width * 0.075: undefined,
+              left:  (languageID == 1 && Platform.OS == 'ios') ? width * -0.075:
+              (languageID != 1 && Platform.OS == 'android')?  width * 0.82 :
+              (languageID == 1 && Platform.OS == 'android')?  width * -0.082 :
+              (languageID != 1 && Platform.OS == 'ios') ?width * 0.78:
+              undefined
+              // right: languageID != 1 && Platform.OS == 'ios'  ?  width * 0.075: undefined,
             }]
           }
           onPress={() => {
@@ -1132,7 +1136,9 @@ useEffect(() => {
                 rating={rating}
                 selectedStar={rating => setrating(rating)}
                 fullStarColor={'red'}
-                containerStyle={{ translateX: languageID == 1 ? -1 : 1 }}
+                containerStyle={{
+                  transform: [{rotateY: languageID == 1 ? "0deg":"180deg"}],
+                }}
               />
               <Text allowFontScaling={false} style={styles.reviewText}>
                 {rating >= 1 && reviewText}
@@ -1166,14 +1172,8 @@ useEffect(() => {
               style={[
                 styles.safeView,
                 {
-                  left:
-                    languageID != 1 &&
-                    Platform.OS == 'ios' &&
-                    activestate != 0 &&
-                    activestate != 5 &&
-                    !keyboard
-                      ? undefined
-                      : width * 0.15,
+                  left:languageID != 1  ? width * 0.05 : undefined
+             
                 },
               ]}>
               {activestate != 0 && activestate != 5 && !keyboard && (
@@ -1234,7 +1234,11 @@ useEffect(() => {
                       styles.experienceView,
                       {
                         right:
-                          languageID != 1 && Platform.OS == 'ios'
+                        (languageID != 1 &&
+                          Platform.OS == 'ios' &&
+                          activestate != 0 &&
+                          activestate != 5 &&
+                          !keyboard)
                             ? width * 0.1
                             : undefined,
                       },

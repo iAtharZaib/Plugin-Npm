@@ -11,7 +11,6 @@ const {height} = Dimensions.get('window');
 let iconPosition = height / 2 - 100;
 
 const FloatingRatingWrapped = ({lang, top = iconPosition}) => {
-  console.log(lang,"lang")
   const [step, setStep] = useState(1);
 
   const dispatch = useDispatch();
