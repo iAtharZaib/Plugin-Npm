@@ -4,6 +4,7 @@ import {
   FlatList,
   Image,
   ImageBackground,
+  Platform,
   Text,
   TouchableOpacity,
   View,
@@ -40,7 +41,7 @@ const SelectLanguage = ({onClose, onLanguageSelect, lang}) => {
       style={[
         styles.imageBackground,
         {
-          flexDirection: lang == 1 ? 'row-reverse' : 'row',
+          flexDirection: lang != 1 && Platform.OS == 'android' ? 'row-reverse' : 'row',
           // left: lang != 1 ? -20 : undefined,
           paddingLeft: lang != 1 ? 30 : undefined,
         },
@@ -103,7 +104,9 @@ const SelectLanguage = ({onClose, onLanguageSelect, lang}) => {
                     {
                       backgroundColor: item.id === selectedId ? 'blue' : '#fff',
                       // flexDirection: lang != 2 ? 'row-reverse' : 'row',
-                       flexDirection: lang == 1 ? 'row-reverse' : 'row',
+                      flexDirection: lang != 1  ? 'row-reverse' : 'row',
+
+                      //  flexDirection: lang == 1 ? 'row-reverse' : 'row',
                       
                     },
                   ]}
