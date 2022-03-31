@@ -13,7 +13,7 @@ import {setFeedbackLanguage} from '../../store/actions';
 import styles from './styles';
 const {width, height} = Dimensions.get('window');
 
-const SelectLanguage = ({onClose, onLanguageSelect}) => {
+const SelectLanguage = ({onClose, onLanguageSelect, lang}) => {
   const [selectedId, setSelectedId] = useState();
   const dispatch = useDispatch();
   const languageResource = useSelector(
@@ -40,14 +40,14 @@ const SelectLanguage = ({onClose, onLanguageSelect}) => {
       style={[
         styles.imageBackground,
         {
-          flexDirection: languageID == 1 ? 'row' : 'row-reverse',
-          left: languageID != 1 ? -20 : undefined,
-          paddingLeft: languageID != 1 ? 30 : undefined,
+          flexDirection: lang == 1 ? 'row-reverse' : 'row',
+          // left: lang != 1 ? -20 : undefined,
+          paddingLeft: lang != 1 ? 30 : undefined,
         },
       ]}
       resizeMode={'cover'}
       source={
-        languageID !== 1
+        lang !== 1
           ? require('../../assets/images/drawerBgReverse.png')
           : require('../../assets/images/drawerBg.png')
       }>
@@ -56,11 +56,11 @@ const SelectLanguage = ({onClose, onLanguageSelect}) => {
           styles.backButton,
           {
             left:
-              languageID != 1 && Platform.OS == 'ios'
+              lang != 1 && Platform.OS == 'ios'
                 ? undefined
                 : width * 0.075,
             right:
-              languageID != 1 && Platform.OS == 'ios'
+              lang != 1 && Platform.OS == 'ios'
                 ? width * 0.075
                 : undefined,
           },
@@ -78,13 +78,13 @@ const SelectLanguage = ({onClose, onLanguageSelect}) => {
           styles.feedbackView,
           {
             marginLeft:
-              languageID != 1 && Platform.OS == 'ios' ? undefined : '10%',
+              lang != 1 && Platform.OS == 'ios' ? undefined : '10%',
             marginRight:
-              languageID != 1 && Platform.OS == 'ios' ? '10%' : undefined,
+              lang != 1 && Platform.OS == 'ios' ? '10%' : undefined,
             paddingLeft:
-              languageID != 1 && Platform.OS == 'ios' ? undefined : '5%',
+              lang != 1 && Platform.OS == 'ios' ? undefined : '5%',
             paddingRight:
-              languageID != 1 && Platform.OS == 'ios' ? '5%' : '10%',
+              lang != 1 && Platform.OS == 'ios' ? '5%' : '10%',
           },
         ]}>
         <Text allowFontScaling={false} style={styles.feedbackText}>
@@ -102,7 +102,9 @@ const SelectLanguage = ({onClose, onLanguageSelect}) => {
                     styles.item,
                     {
                       backgroundColor: item.id === selectedId ? 'blue' : '#fff',
-                      flexDirection: languageID != 1 ? 'row-reverse' : 'row',
+                      // flexDirection: lang != 2 ? 'row-reverse' : 'row',
+                       flexDirection: lang == 1 ? 'row-reverse' : 'row',
+                      
                     },
                   ]}
                   onPress={() => {

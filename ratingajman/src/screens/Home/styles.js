@@ -12,7 +12,7 @@ export default StyleSheet.create({
     alignItems: 'flex-end',
   },
   ImgCont: {
-    left: width * 0.12,
+   
     width: width * 0.4,
     height: width * 0.4,
     alignSelf: 'flex-end',

@@ -17,24 +17,7 @@ const Home = ({onPressIcon, lang}) => {
   const languageID = useSelector(state => state.resourcesReducer.languageID);
   useEffect(() => {
     dispatch(setLanguage(lang));
-    // if (lang) {
-    //   dispatch(setLanguage(lang));
-    // } else {
-    //   var deviceLanguage =
-    //     Platform.OS === 'ios'
-    //       ? NativeModules.SettingsManager.settings.AppleLocale ||
-    //         NativeModules.SettingsManager.settings.AppleLanguages[0] // iOS 13
-    //       : NativeModules.I18nManager.localeIdentifier;
-    //   console.log(deviceLanguage, 'deviceLanguage in home page');
-    //   deviceLanguage = deviceLanguage.slice(0, 2);
-    //   if (deviceLanguage == 'en') {
-    //     dispatch(setLanguage(1));
-    //   } else if (deviceLanguage == 'ar') {
-    //     dispatch(setLanguage(2));
-    //   } else if (deviceLanguage == 'ur') {
-    //     dispatch(setLanguage(3));
-    //   }
-    // }
+   
   }, [lang]);
 
   return (
@@ -42,15 +25,15 @@ const Home = ({onPressIcon, lang}) => {
       style={[
         styles.Container,
         {
-          left: lang != 1 ? -50 : undefined,
-          right: lang == 1 ? -50 : undefined,
+          left: lang != 1 && Platform.OS == 'android' ? -50 : undefined,
+          right: lang == 1 ? -50 : 5,
         },
       ]}>
       <TouchableOpacity
         style={[
           styles.ImgCont,
           {
-            left: lang != 1 && Platform.OS == 'ios' ? undefined : 0,
+            // left: lang != 1 && Platform.OS == 'ios' ? undefined : 0,
           },
         ]}
         onPress={() => onPressIcon()}>

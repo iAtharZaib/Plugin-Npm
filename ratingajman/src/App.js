@@ -10,7 +10,8 @@ import {persistor, store} from './store/store';
 const {height} = Dimensions.get('window');
 let iconPosition = height / 2 - 100;
 
-const FloatingRatingWrapped = ({lang = 1, top = iconPosition}) => {
+const FloatingRatingWrapped = ({lang, top = iconPosition}) => {
+  console.log(lang,"lang")
   const [step, setStep] = useState(1);
 
   const dispatch = useDispatch();
@@ -40,14 +41,15 @@ const FloatingRatingWrapped = ({lang = 1, top = iconPosition}) => {
   return (
     <View style={style}>
       {step === 1 ? (
-        <Home onPressIcon={() => setStep(2)} lang={lang} />
+        <Home lang={lang} onPressIcon={() => setStep(2)} />
       ) : step === 2 ? (
         <SelectLanguage
           onLanguageSelect={() => setStep(3)}
+          lang={lang}
           onClose={() => setStep(1)}
         />
       ) : (
-        <ProvideFeedback onClose={() => setStep(1)}/>
+        <ProvideFeedback onClose={() => setStep(1)} lang={lang}/>
       )}
     </View>
   );

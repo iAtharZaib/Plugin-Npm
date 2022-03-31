@@ -42,13 +42,14 @@ import styles from './styles';
 // import axios from 'axios';
 import {useKeepAwake} from '@unsw-gsbme/react-native-keep-awake/src/index';
 const {width, height} = Dimensions.get('window');
-const ProvideFeedback = ({onClose}) => {
+const ProvideFeedback = ({onClose,lang}) => {
   useKeepAwake();
   const languageResource = useSelector(
     state => state.resourcesReducer.resource,
   );
   const feedbackID = useSelector(state => state.resourcesReducer.feedbackID);
-  const languageID = useSelector(state => state.resourcesReducer.languageID);
+  // const languageID = useSelector(state => state.resourcesReducer.languageID);
+  const [languageID, setlanguageID] = useState(lang)
   const [reviewstate, setreviewstate] = useState(false);
   const [activestate, setactivestate] = useState(0);
   const apiLink = useSelector(state => state.resourcesReducer.apiLink);
@@ -425,6 +426,7 @@ useEffect(() => {
       } else {
         if (
           res.type == 'image/jpeg' ||
+          res.type == 'image/jpg' ||
           res.type == 'image/png' ||
           res.type == 'image/heic'
         ) {
@@ -989,10 +991,7 @@ useEffect(() => {
       style={[
         styles.mainContainer,
         {
-          width:
-            (activestate == 2 || activestate == 3) && languageID != 1
-              ? '95%'
-              : '100%',
+          
         },
       ]}
       resizeMode={'cover'}
@@ -1075,20 +1074,15 @@ useEffect(() => {
             marginLeft: languageID != 1 ? width * 0.5 : width * 0.15,
             left: languageID != 1 ? -175 : undefined,
             width: languageID != 1 ? '70%' : '85%',
+            
           },
         ]}>
         <TouchableOpacity
-          style={[
-            styles.feedbackButton,
-            {
-              left:
-                languageID != 1
-                  ? Platform.OS == 'ios'
-                    ? undefined
-                    : width * 0.75
-                  : width * -0.075,
-            },
-          ]}
+            style={[styles.feedbackButton,{
+              // left:  languageID != 1 && Platform.OS == 'ios'  ? undefined : width * -0.075,
+              right: languageID != 1 && Platform.OS == 'ios'  ?  width * 0.075: undefined,
+            }]
+          }
           onPress={() => {
             onStopPlay();
             if (!feedbackSubmitted) {
@@ -1138,9 +1132,7 @@ useEffect(() => {
                 rating={rating}
                 selectedStar={rating => setrating(rating)}
                 fullStarColor={'red'}
-                containerStyle={{
-                  transform: [{rotateY: languageID == 1 ? '0deg' : '180deg'}],
-                }}
+                containerStyle={{ translateX: languageID == 1 ? -1 : 1 }}
               />
               <Text allowFontScaling={false} style={styles.reviewText}>
                 {rating >= 1 && reviewText}
@@ -1174,14 +1166,14 @@ useEffect(() => {
               style={[
                 styles.safeView,
                 {
-                  right:
+                  left:
                     languageID != 1 &&
                     Platform.OS == 'ios' &&
                     activestate != 0 &&
                     activestate != 5 &&
                     !keyboard
-                      ? width * 0.15
-                      : undefined,
+                      ? undefined
+                      : width * 0.15,
                 },
               ]}>
               {activestate != 0 && activestate != 5 && !keyboard && (
