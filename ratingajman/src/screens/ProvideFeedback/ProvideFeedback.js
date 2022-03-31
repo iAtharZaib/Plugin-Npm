@@ -115,7 +115,7 @@ const ProvideFeedback = ({onClose}) => {
   };
 
 useEffect(() => {
-  if(toggleCheckBox) {
+  if(toggleCheckBox && docuement) {
     setattachmentStatus(true)
   }
   else {
@@ -276,13 +276,7 @@ useEffect(() => {
           onStartCamera(feedbackphoto);
         } else if (activestate == 2) {
           postVideoFeedback(videodata);
-        }
-
-        if (docuement) {
-          postDocumentFeedback();
-        } else {
-          setdocuement();
-        }
+        }        
 
         setshowrating(true);
       } else {
@@ -600,7 +594,7 @@ useEffect(() => {
     data.append('user', 'test');
     data.append('domain', 'audio');
     data.append('feedback_type', 'audio');
-    data.append('attachment_status', attachmentStatus);
+    data.append('attachment_status', 'false');
     data.append('feedback_id', 0);
     setrecordingdata(data);
   };
@@ -647,7 +641,7 @@ useEffect(() => {
   const PostAudioFeedback = async () => {
     setfeedbackSubmitted(true);
     try {
-
+      console.log(recordingdata,"recordingdata")
       let res = await fetch(
         apiLink,
         {
@@ -662,6 +656,11 @@ useEffect(() => {
       let a= await res.json()
       console.log("res", await a.data.id);
       await setfeedbackIDFromResponse(a.data.id)
+      if (docuement) {
+       await postDocumentFeedback(a.data.id);
+      } else {
+        setdocuement();
+      }
       setrecordingdata(null);
     } catch (error) {
       Alert.alert(
@@ -689,7 +688,7 @@ useEffect(() => {
     data.append('user', 'admin');
     data.append('domain', 'video');
     data.append('feedback_type', 'video');
-    data.append('attachment_status', attachmentStatus);
+    data.append('attachment_status', 'false');
     data.append('feedback_id', 0);
     try {
       let res = await fetch(
@@ -706,6 +705,11 @@ useEffect(() => {
       let a= await res.json()
       console.log("res", await a.data.id);
       await setfeedbackIDFromResponse(a.data.id)
+      if (docuement) {
+        await postDocumentFeedback(a.data.id);
+       } else {
+         setdocuement();
+       }
     } catch (error) {
       Alert.alert(
         languageResource.Alert,
@@ -736,7 +740,7 @@ useEffect(() => {
       data.append('user', 'admin');
       data.append('domain', 'image');
       data.append('feedback_type', 'image');
-      data.append('attachment_status', attachmentStatus);
+      data.append('attachment_status', 'false');
       data.append('feedback_id', 0);
       let res = await fetch(
         apiLink,
@@ -752,6 +756,11 @@ useEffect(() => {
       let a= await res.json()
       console.log("res", await a.data.id);
       await setfeedbackIDFromResponse(a.data.id)
+      if (docuement) {
+        await postDocumentFeedback(a.data.id);
+       } else {
+         setdocuement();
+       }
       setfeedbackphoto(null);
     } catch (error) {
       Alert.alert(
@@ -768,7 +777,7 @@ useEffect(() => {
     }
   };
 
-  const postDocumentFeedback = async () => {
+  const postDocumentFeedback = async (id) => {
     setfeedbackSubmitted(true);
     try {
       const data = new FormData();
@@ -783,8 +792,8 @@ useEffect(() => {
       data.append('user', 'admin');
       data.append('domain', 'attachment');
       data.append('feedback_type', 'image');
-      data.append('attachment_status', 'false');
-      data.append('feedback_id', feedbackIDFromResponse);
+      data.append('attachment_status', true);
+      data.append('feedback_id', id);
       let res = await fetch(
         apiLink,
         {
@@ -913,7 +922,7 @@ useEffect(() => {
           data.append('user', 'admin');
           data.append('domain', 'text');
           data.append('feedback_type', 'text');
-          data.append('attachment_status', attachmentStatus);
+          data.append('attachment_status', 'false');
           data.append('feedback_id', 0);
           let res = await fetch(
             apiLink,
@@ -929,6 +938,11 @@ useEffect(() => {
           let a= await res.json()
           console.log("res", await a.data.id);
           await setfeedbackIDFromResponse(a.data.id)
+          if (docuement) {
+            await postDocumentFeedback(a.data.id);
+           } else {
+             setdocuement();
+           }
           setfeedbacktext('');
           setreviewstate(true);
           RNFS.unlink(path)
@@ -1036,11 +1050,12 @@ useEffect(() => {
         animationType="fade">
         <View style={styles.videoView}>
           <View style={{width, height}}>
-            <Video
-              paused={false}
-              source={{uri: videodata?.uri}}
+          <Video
+              controls
               resizeMode="cover"
-              style={styles.documentStyling}
+              source={{ uri: videodata?.uri }} // Can be a URL or a local file.
+              repeat
+              style={{ width: "100%", height: "100%" }}
             />
           </View>
 
@@ -1427,8 +1442,8 @@ useEffect(() => {
                           {recording == 3 ? (
                             <>
                               <AnimatedCircularProgress
-                                size={120}
-                                width={7}
+                                 size={100}
+                                 width={5}
                                 style={{
                                   alignSelf: 'center',
                                   justifyContent: 'space-evenly',
@@ -1499,8 +1514,8 @@ useEffect(() => {
                           ) : recording == 1 ? (
                             <TouchableOpacity onPress={() => onStopRecord()}>
                               <AnimatedCircularProgress
-                                size={120}
-                                width={7}
+                                 size={100}
+                                 width={5}
                                 style={{
                                   alignSelf: 'center',
                                   transform: [
@@ -1606,18 +1621,10 @@ useEffect(() => {
                             </TouchableOpacity>
                           )}
                           <Video
-                            paused={true}
-                            poster={
-                              'https://wallpaperaccess.com/full/1595904.jpg'
-                            }
                             controls={true}
                             resizeMode="cover"
-                            source={{uri: videodata ? videodata.uri : ''}}
-                            style={{
-                              width: languageID == 1 ? '95%' : '88%',
-                              height: '100%',
-                              alignSelf: 'center',
-                            }}
+                            source={{ uri: videodata?.uri }} // Can be a URL or a local file.
+                            style={{ width: "100%", height: "100%" }}
                           />
                         </View>
                       ) : activestate == 3 ? (
@@ -1679,6 +1686,7 @@ useEffect(() => {
                                   : languageID != 1 && Platform.OS == 'android'
                                   ? 'flex-end'
                                   : 'flex-end',
+                                  color:'black',
                             }}>
                             {500 -
                               feedbacktext?.length +
@@ -1743,6 +1751,7 @@ useEffect(() => {
                             <Text
                               style={{
                                 marginHorizontal: Platform.OS == 'ios' ? 10 : 0,
+                                color:'black',
                               }}>
                               {languageResource.Add_Attachment}
                             </Text>
@@ -2004,7 +2013,9 @@ useEffect(() => {
                                         color: '#fff',
                                         fontSize: width * 0.04,
                                       }}>
-                                      {languageResource.Submit}
+                                      {!toggleCheckBox
+                                      ? languageResource.Submit
+                                      : languageResource.Next}
                                     </Text>
                                   </TouchableOpacity>
                                 </>
