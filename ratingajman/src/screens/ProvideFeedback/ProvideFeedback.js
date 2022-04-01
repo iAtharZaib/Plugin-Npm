@@ -428,10 +428,14 @@ useEffect(() => {
           res.type == 'image/jpeg' ||
           res.type == 'image/jpg' ||
           res.type == 'image/png' ||
-          res.type == 'image/heic'
-        ) {
+          res.type == 'image/heic' ||
+          res[0].type == 'image/jpeg' ||
+          res[0].type == 'image/jpg' ||
+          res[0].type == 'image/png' ||
+          res[0].type == 'image/heic'
+          ) {
           {
-            setdocuement(res);
+          setdocuement(res[0] != undefined ? res[0] : res);
           }
         } else if (res.type == 'application/pdf') {
           setdocuement({
@@ -1080,9 +1084,9 @@ useEffect(() => {
         <TouchableOpacity
             style={[styles.feedbackButton,{
               left:  (languageID == 1 && Platform.OS == 'ios') ? width * -0.075:
-              (languageID != 1 && Platform.OS == 'android')?  width * 0.82 :
-              (languageID == 1 && Platform.OS == 'android')?  width * -0.082 :
-              (languageID != 1 && Platform.OS == 'ios') ?width * 0.78:
+              (languageID != 1 && Platform.OS == 'android')?  width * 0.80 :
+              (languageID == 1 && Platform.OS == 'android')?  width * -0.08 :
+              (languageID != 1 && Platform.OS == 'ios') ?width * 0.75:
               undefined
               // right: languageID != 1 && Platform.OS == 'ios'  ?  width * 0.075: undefined,
             }]
