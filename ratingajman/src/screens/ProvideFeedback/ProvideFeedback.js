@@ -525,20 +525,20 @@ useEffect(() => {
       check(PERMISSIONS.IOS.MICROPHONE).then(result => {
         switch (result) {
           case RESULTS.UNAVAILABLE:
-            setactivestate(5);
+            // setactivestate(5);
             break;
           case RESULTS.DENIED:
-            setactivestate(5);
+            // setactivestate(5);
             request(PERMISSIONS.IOS.MICROPHONE);
             break;
           case RESULTS.LIMITED:
-            setactivestate(5);
+            // setactivestate(5);
             break;
           case RESULTS.GRANTED:
             onStartRecording();
             break;
           case RESULTS.BLOCKED:
-            setactivestate(5);
+            // setactivestate(5);
             Linking.openSettings();
             break;
         }
@@ -1289,7 +1289,7 @@ useEffect(() => {
                     resizeMode="contain"
                     style={styles.textImage}
                   />
-                  <Text allowFontScaling={false} style={styles.textView}>
+                  <Text allowFontScaling={false} style={styles.textView} onPress={() => Linking.openSettings()}>
                     {languageResource.No_microphone_detected}
                   </Text>
                 </View>
