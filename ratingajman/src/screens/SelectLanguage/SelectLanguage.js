@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -9,18 +9,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {setFeedbackLanguage} from '../../store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFeedbackLanguage } from '../../store/actions';
 import styles from './styles';
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
-const SelectLanguage = ({onClose, onLanguageSelect, lang}) => {
+const SelectLanguage = ({ onClose, onLanguageSelect, lang }) => {
   const [selectedId, setSelectedId] = useState();
   const dispatch = useDispatch();
-  const languageResource = useSelector(
-    state => state.resourcesReducer.resource,
-  );
-  const languageID = useSelector(state => state.resourcesReducer.languageID);
+  const languageResource = useSelector((state) => state.resourcesReducer.resource);
+  const languageID = useSelector((state) => state.resourcesReducer.languageID);
   const languages = [
     {
       id: 1,
@@ -42,8 +40,6 @@ const SelectLanguage = ({onClose, onLanguageSelect, lang}) => {
         styles.imageBackground,
         {
           flexDirection: lang != 1 && Platform.OS == 'android' ? 'row-reverse' : 'row',
-          // left: lang != 1 ? -20 : undefined,
-          paddingLeft: lang != 1 ? 30 : undefined,
         },
       ]}
       resizeMode={'cover'}
@@ -52,21 +48,7 @@ const SelectLanguage = ({onClose, onLanguageSelect, lang}) => {
           ? require('../../assets/images/drawerBgReverse.png')
           : require('../../assets/images/drawerBg.png')
       }>
-      <TouchableOpacity
-        style={[
-          styles.backButton,
-          {
-            left:
-              lang != 1 && Platform.OS == 'ios'
-                ? undefined
-                : width * 0.075,
-            right:
-              lang != 1 && Platform.OS == 'ios'
-                ? width * 0.075
-                : undefined,
-          },
-        ]}
-        onPress={() => onClose()}>
+      <TouchableOpacity style={[styles.backButton]} onPress={() => onClose()}>
         <Image
           source={require('../../assets/images/cross.png')}
           resizeMode="contain"
@@ -74,20 +56,7 @@ const SelectLanguage = ({onClose, onLanguageSelect, lang}) => {
         />
       </TouchableOpacity>
 
-      <View
-        style={[
-          styles.feedbackView,
-          {
-            marginLeft:
-              lang != 1 && Platform.OS == 'ios' ? undefined : '10%',
-            marginRight:
-              lang != 1 && Platform.OS == 'ios' ? '10%' : undefined,
-            paddingLeft:
-              lang != 1 && Platform.OS == 'ios' ? undefined : '5%',
-            paddingRight:
-              lang != 1 && Platform.OS == 'ios' ? '5%' : '10%',
-          },
-        ]}>
+      <View style={[styles.feedbackView]}>
         <Text allowFontScaling={false} style={styles.feedbackText}>
           {' '}
           {languageResource.Select_language_of_your_feedback}
@@ -96,18 +65,13 @@ const SelectLanguage = ({onClose, onLanguageSelect, lang}) => {
           <FlatList
             scrollEnabled={false}
             data={languages}
-            renderItem={({item}) => {
+            renderItem={({ item }) => {
               return (
                 <TouchableOpacity
                   style={[
                     styles.item,
                     {
                       backgroundColor: item.id === selectedId ? 'blue' : '#fff',
-                      // flexDirection: lang != 2 ? 'row-reverse' : 'row',
-                      flexDirection: lang != 1  ? 'row-reverse' : 'row',
-
-                      //  flexDirection: lang == 1 ? 'row-reverse' : 'row',
-                      
                     },
                   ]}
                   onPress={() => {
@@ -138,7 +102,7 @@ const SelectLanguage = ({onClose, onLanguageSelect, lang}) => {
                 </TouchableOpacity>
               );
             }}
-            keyExtractor={item => item.id}
+            keyExtractor={(item) => item.id}
             extraData={selectedId}
           />
         </View>

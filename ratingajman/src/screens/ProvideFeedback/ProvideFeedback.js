@@ -1,6 +1,6 @@
 import CheckBox from '@react-native-community/checkbox';
 import NetInfo from '@react-native-community/netinfo';
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppState,
   Dimensions,
@@ -26,45 +26,41 @@ import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
 } from 'react-native-audio-recorder-player';
-import {AnimatedCircularProgress} from 'react-native-circular-progress';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
-import {launchCamera} from 'react-native-image-picker';
+import { launchCamera } from 'react-native-image-picker';
 import MovToMp4 from 'react-native-mov-to-mp4';
 import Pdf from 'react-native-pdf';
-import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 import StarRating from 'react-native-star-rating';
 import Icon from 'react-native-vector-icons/dist/Entypo';
 import Video from 'react-native-video';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 // import ReactNativeBlobUtil from 'react-native-blob-util';
 import styles from './styles';
 // import axios from 'axios';
-import {useKeepAwake} from '@unsw-gsbme/react-native-keep-awake/src/index';
-const {width, height} = Dimensions.get('window');
-const ProvideFeedback = ({onClose,lang}) => {
+import { useKeepAwake } from '@unsw-gsbme/react-native-keep-awake/src/index';
+const { width, height } = Dimensions.get('window');
+const ProvideFeedback = ({ onClose, lang }) => {
   useKeepAwake();
-  const languageResource = useSelector(
-    state => state.resourcesReducer.resource,
-  );
-  const feedbackID = useSelector(state => state.resourcesReducer.feedbackID);
+  const languageResource = useSelector((state) => state.resourcesReducer.resource);
+  const feedbackID = useSelector((state) => state.resourcesReducer.feedbackID);
   // const languageID = useSelector(state => state.resourcesReducer.languageID);
-  const [languageID, setlanguageID] = useState(lang)
+  const [languageID, setlanguageID] = useState(lang);
   const [reviewstate, setreviewstate] = useState(false);
   const [activestate, setactivestate] = useState(0);
-  const apiLink = useSelector(state => state.resourcesReducer.apiLink);
-  const [attachmentStatus, setattachmentStatus] = useState(false)
+  const apiLink = useSelector((state) => state.resourcesReducer.apiLink);
+  const [attachmentStatus, setattachmentStatus] = useState(false);
   const [playTimeraw, setPlayTimeraw] = useState(0);
   const [recording, setrecording] = useState(0);
-  const [audioRecorderPlayer, setaudioRecorderPlayer] = useState(
-    new AudioRecorderPlayer(),
-  );
+  const [audioRecorderPlayer, setaudioRecorderPlayer] = useState(new AudioRecorderPlayer());
   audioRecorderPlayer.setSubscriptionDuration(0.1);
   const [recordingdata, setrecordingdata] = useState(null);
   const [audiopaused, setaudiopaused] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
-  const [feedbackIDFromResponse, setfeedbackIDFromResponse] = useState(0)
+  const [feedbackIDFromResponse, setfeedbackIDFromResponse] = useState(0);
   const [usercancelled, setusercancelled] = useState(false);
   const [feedbackphoto, setfeedbackphoto] = useState(null);
   const [feedbacktext, setfeedbacktext] = useState('');
@@ -93,8 +89,7 @@ const ProvideFeedback = ({onClose,lang}) => {
   const headers = {
     Pragma: 'no-cache',
     'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
-    Accept:
-      'multipart/form-data; boundary=----WebKitFormBoundaryt0mA6M0xyyBgI2pj',
+    Accept: 'multipart/form-data; boundary=----WebKitFormBoundaryt0mA6M0xyyBgI2pj',
     'Content-Type': '*/*',
   };
   function toggle() {
@@ -115,21 +110,19 @@ const ProvideFeedback = ({onClose,lang}) => {
     setaudiopaused(false);
   };
 
-useEffect(() => {
-  if(toggleCheckBox && docuement) {
-    setattachmentStatus(true)
-  }
-  else {
-    setattachmentStatus(false)
-  }
-}, [toggleCheckBox])
-
+  useEffect(() => {
+    if (toggleCheckBox && docuement) {
+      setattachmentStatus(true);
+    } else {
+      setattachmentStatus(false);
+    }
+  }, [toggleCheckBox]);
 
   useEffect(() => {
     let interval = null;
     if (isActive) {
       interval = setInterval(() => {
-        setSeconds(seconds => seconds + 1);
+        setSeconds((seconds) => seconds + 1);
       }, 1000);
     } else if (!isActive && seconds !== 0) {
       clearInterval(interval);
@@ -150,11 +143,8 @@ useEffect(() => {
     };
   }, []);
 
-  const _handleAppStateChange = async nextAppState => {
-    if (
-      appState.current.match(/inactive|background/) &&
-      nextAppState === 'active'
-    )
+  const _handleAppStateChange = async (nextAppState) => {
+    if (appState.current.match(/inactive|background/) && nextAppState === 'active')
       appState.current = nextAppState;
     if (appState.current === 'background') {
       if (!reviewstate && recordingdata != null) {
@@ -243,18 +233,12 @@ useEffect(() => {
   ];
 
   useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        setkeyboard(true);
-      },
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setkeyboard(false);
-      },
-    );
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setkeyboard(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setkeyboard(false);
+    });
 
     return () => {
       keyboardDidHideListener.remove();
@@ -263,7 +247,7 @@ useEffect(() => {
   }, []);
 
   function Clear() {
-    netinfo().then(res => {
+    netinfo().then((res) => {
       if (res) {
         setactivestate(0);
         setreviewstate(false);
@@ -277,20 +261,16 @@ useEffect(() => {
           onStartCamera(feedbackphoto);
         } else if (activestate == 2) {
           postVideoFeedback(videodata);
-        }        
+        }
 
         setshowrating(true);
       } else {
-        Alert.alert(
-          languageResource.Alert,
-          languageResource.No_internet_connection,
-          [
-            {
-              text: languageResource.Ok,
-              onPress: () => console.log('OK Pressed'),
-            },
-          ],
-        );
+        Alert.alert(languageResource.Alert, languageResource.No_internet_connection, [
+          {
+            text: languageResource.Ok,
+            onPress: () => console.log('OK Pressed'),
+          },
+        ]);
       }
     });
   }
@@ -334,7 +314,7 @@ useEffect(() => {
           cameraType: 'front',
         },
 
-        res => {
+        (res) => {
           if (res.assets) {
             setusercancelled(false);
             setfeedbackphoto(res.assets[0]);
@@ -355,24 +335,22 @@ useEffect(() => {
           durationLimit: 60,
           cameraType: 'front',
         },
-        res => {
+        (res) => {
           if (res?.assets) {
             if (res?.assets[0].duration >= 5) {
               setusercancelled(false);
               if (Platform.OS == 'ios') {
                 const filename = Date.now().toString();
 
-                MovToMp4.convertMovToMp4(res.assets[0].uri, filename).then(
-                  function (results) {
-                    const videoData = {
-                      uri: results,
-                      fileName: filename + '.mp4',
-                      duration: res.assets[0].duration,
-                    };
-                    setvideodata(videoData);
-                    postVideoFeedback(videoData);
-                  },
-                );
+                MovToMp4.convertMovToMp4(res.assets[0].uri, filename).then(function (results) {
+                  const videoData = {
+                    uri: results,
+                    fileName: filename + '.mp4',
+                    duration: res.assets[0].duration,
+                  };
+                  setvideodata(videoData);
+                  postVideoFeedback(videoData);
+                });
               } else {
                 const videoDataAndroid = {
                   uri: res.assets[0].uri,
@@ -433,9 +411,9 @@ useEffect(() => {
           res[0].type == 'image/jpg' ||
           res[0].type == 'image/png' ||
           res[0].type == 'image/heic'
-          ) {
+        ) {
           {
-          setdocuement(res[0] != undefined ? res[0] : res);
+            setdocuement(res[0] != undefined ? res[0] : res);
           }
         } else if (res.type == 'application/pdf') {
           setdocuement({
@@ -466,7 +444,7 @@ useEffect(() => {
     }
   };
 
-  const onStartCamera = async photo => {
+  const onStartCamera = async (photo) => {
     if (Platform.OS === 'android') {
       try {
         await postImageFeedback(photo);
@@ -476,7 +454,7 @@ useEffect(() => {
     }
 
     if (Platform.OS == 'ios') {
-      check(PERMISSIONS.IOS.CAMERA).then(result => {
+      check(PERMISSIONS.IOS.CAMERA).then((result) => {
         switch (result) {
           case RESULTS.UNAVAILABLE:
             break;
@@ -510,8 +488,7 @@ useEffect(() => {
             PermissionsAndroid.RESULTS.GRANTED &&
           grants['android.permission.READ_EXTERNAL_STORAGE'] ===
             PermissionsAndroid.RESULTS.GRANTED &&
-          grants['android.permission.RECORD_AUDIO'] ===
-            PermissionsAndroid.RESULTS.GRANTED
+          grants['android.permission.RECORD_AUDIO'] === PermissionsAndroid.RESULTS.GRANTED
         ) {
           onStartRecording();
         } else {
@@ -526,7 +503,7 @@ useEffect(() => {
     }
 
     if (Platform.OS == 'ios') {
-      check(PERMISSIONS.IOS.MICROPHONE).then(result => {
+      check(PERMISSIONS.IOS.MICROPHONE).then((result) => {
         switch (result) {
           case RESULTS.UNAVAILABLE:
             // setactivestate(5);
@@ -573,12 +550,12 @@ useEffect(() => {
 
     const uri = await audioRecorderPlayer.startRecorder(path, audioSet);
 
-    audioRecorderPlayer.addRecordBackListener(e => {
+    audioRecorderPlayer.addRecordBackListener((e) => {
       setPlayTimeraw(e.currentPosition);
     });
   };
 
-  const timeConverter = millis => {
+  const timeConverter = (millis) => {
     var minutes = Math.floor(millis / 60000);
     var seconds2 = ((millis % 60000) / 1000).toFixed(0);
     return minutes + ':' + (seconds2 < 10 ? '0' : '') + seconds2;
@@ -607,29 +584,25 @@ useEffect(() => {
 
   useEffect(() => {
     if (playTimeraw && playTimeraw < 5120) {
-      Alert.alert(
-        languageResource.Alert,
-        languageResource.Audio_should_be_minimum_5_seconds,
-        [
-          {
-            text: languageResource.Ok,
-            onPress: () => console.log('OK Pressed'),
-          },
-        ],
-      );
+      Alert.alert(languageResource.Alert, languageResource.Audio_should_be_minimum_5_seconds, [
+        {
+          text: languageResource.Ok,
+          onPress: () => console.log('OK Pressed'),
+        },
+      ]);
       setrecording(0);
       setPlayTimeraw(0);
       setrecordingdata(null);
     }
   }, [recordingdata]);
 
-  const onStartPlay = async url => {
+  const onStartPlay = async (url) => {
     setrecording(3);
 
     const msg = await audioRecorderPlayer.startPlayer(url);
     const volume = await audioRecorderPlayer.setVolume(1.0);
 
-    audioRecorderPlayer.addPlayBackListener(e => {
+    audioRecorderPlayer.addPlayBackListener((e) => {
       setplayertime((e.currentPosition / e.duration) * 100);
 
       if (e.currentPosition == e.duration) {
@@ -647,43 +620,36 @@ useEffect(() => {
   const PostAudioFeedback = async () => {
     setfeedbackSubmitted(true);
     try {
-      console.log(recordingdata,"recordingdata")
-      let res = await fetch(
-        apiLink,
-        {
-          method: "POST",
-          headers: {
-            Pragma: "no-cache",
-            "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
-          },
-          body: recordingdata,
-        }
-      );
-      let a= await res.json()
-      console.log("res", await a.data.id);
-      await setfeedbackIDFromResponse(a.data.id)
+      console.log(recordingdata, 'recordingdata');
+      let res = await fetch(apiLink, {
+        method: 'POST',
+        headers: {
+          Pragma: 'no-cache',
+          'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
+        },
+        body: recordingdata,
+      });
+      let a = await res.json();
+      console.log('res', await a.data.id);
+      await setfeedbackIDFromResponse(a.data.id);
       if (docuement) {
-       await postDocumentFeedback(a.data.id);
+        await postDocumentFeedback(a.data.id);
       } else {
         setdocuement();
       }
       setrecordingdata(null);
     } catch (error) {
-      Alert.alert(
-        languageResource.Alert,
-        languageResource.Something_went_wrong_in_sharing_audio,
-        [
-          {
-            text: languageResource.Ok,
-            onPress: () => console.log('OK Pressed'),
-          },
-        ],
-      );
+      Alert.alert(languageResource.Alert, languageResource.Something_went_wrong_in_sharing_audio, [
+        {
+          text: languageResource.Ok,
+          onPress: () => console.log('OK Pressed'),
+        },
+      ]);
       setrecordingdata(null);
     }
   };
 
-  const postVideoFeedback = async vidData => {
+  const postVideoFeedback = async (vidData) => {
     setfeedbackSubmitted(true);
     const data = new FormData();
     data.append('feedback_file', {
@@ -697,49 +663,39 @@ useEffect(() => {
     data.append('attachment_status', 'false');
     data.append('feedback_id', 0);
     try {
-      let res = await fetch(
-        apiLink,
-        {
-          method: "POST",
-          headers: {
-            Pragma: "no-cache",
-            "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
-          },
-          body: data,
-        }
-      );
-      let a= await res.json()
-      console.log("res", await a.data.id);
-      await setfeedbackIDFromResponse(a.data.id)
+      let res = await fetch(apiLink, {
+        method: 'POST',
+        headers: {
+          Pragma: 'no-cache',
+          'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
+        },
+        body: data,
+      });
+      let a = await res.json();
+      console.log('res', await a.data.id);
+      await setfeedbackIDFromResponse(a.data.id);
       if (docuement) {
         await postDocumentFeedback(a.data.id);
-       } else {
-         setdocuement();
-       }
+      } else {
+        setdocuement();
+      }
     } catch (error) {
-      Alert.alert(
-        languageResource.Alert,
-        languageResource.Something_went_wrong_in_sharing_video,
-        [
-          {
-            text: languageResource.Ok,
-            onPress: () => console.log('OK Pressed'),
-          },
-        ],
-      );
+      Alert.alert(languageResource.Alert, languageResource.Something_went_wrong_in_sharing_video, [
+        {
+          text: languageResource.Ok,
+          onPress: () => console.log('OK Pressed'),
+        },
+      ]);
       setvideodata(null);
     }
   };
 
-  const postImageFeedback = async cameraResponse => {
+  const postImageFeedback = async (cameraResponse) => {
     setfeedbackSubmitted(true);
     try {
       const data = new FormData();
       data.append('feedback_file', {
-        uri:
-          Platform.OS === 'ios'
-            ? cameraResponse.uri.replace('file://', '')
-            : cameraResponse.uri,
+        uri: Platform.OS === 'ios' ? cameraResponse.uri.replace('file://', '') : cameraResponse.uri,
         name: cameraResponse.fileName,
         type: cameraResponse.type,
       });
@@ -748,37 +704,30 @@ useEffect(() => {
       data.append('feedback_type', 'image');
       data.append('attachment_status', 'false');
       data.append('feedback_id', 0);
-      let res = await fetch(
-        apiLink,
-        {
-          method: "POST",
-          headers: {
-            Pragma: "no-cache",
-            "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
-          },
-          body: data,
-        }
-      );
-      let a= await res.json()
-      console.log("res", await a.data.id);
-      await setfeedbackIDFromResponse(a.data.id)
+      let res = await fetch(apiLink, {
+        method: 'POST',
+        headers: {
+          Pragma: 'no-cache',
+          'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
+        },
+        body: data,
+      });
+      let a = await res.json();
+      console.log('res', await a.data.id);
+      await setfeedbackIDFromResponse(a.data.id);
       if (docuement) {
         await postDocumentFeedback(a.data.id);
-       } else {
-         setdocuement();
-       }
+      } else {
+        setdocuement();
+      }
       setfeedbackphoto(null);
     } catch (error) {
-      Alert.alert(
-        languageResource.Alert,
-        languageResource.Something_went_wrong_in_sharing_image,
-        [
-          {
-            text: languageResource.Ok,
-            onPress: () => console.log('OK Pressed'),
-          },
-        ],
-      );
+      Alert.alert(languageResource.Alert, languageResource.Something_went_wrong_in_sharing_image, [
+        {
+          text: languageResource.Ok,
+          onPress: () => console.log('OK Pressed'),
+        },
+      ]);
       setfeedbackphoto(null);
     }
   };
@@ -788,10 +737,7 @@ useEffect(() => {
     try {
       const data = new FormData();
       data.append('feedback_file', {
-        uri:
-          Platform.OS === 'ios'
-            ? docuement.uri.replace('file://', '')
-            : docuement.uri,
+        uri: Platform.OS === 'ios' ? docuement.uri.replace('file://', '') : docuement.uri,
         name: docuement.name,
         type: docuement.type,
       });
@@ -800,18 +746,15 @@ useEffect(() => {
       data.append('feedback_type', 'image');
       data.append('attachment_status', true);
       data.append('feedback_id', id);
-      let res = await fetch(
-        apiLink,
-        {
-          method: "POST",
-          headers: {
-            Pragma: "no-cache",
-            "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
-          },
-          body: data,
-        }
-      );
-      console.log("res", await res.json());
+      let res = await fetch(apiLink, {
+        method: 'POST',
+        headers: {
+          Pragma: 'no-cache',
+          'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
+        },
+        body: data,
+      });
+      console.log('res', await res.json());
       setdocuement();
     } catch (error) {
       Alert.alert(
@@ -834,10 +777,8 @@ useEffect(() => {
       const data = new FormData();
       let path = RNFS.DocumentDirectoryPath + `/${Date.now()}ratingFile.txt`;
       RNFS.writeFile(path, 'rating= ' + rating, 'utf8')
-        .then(async success => {
-          RNFS.readFile(path, 'utf8').then(file =>
-            console.log(file, 'rating text', rating),
-          );
+        .then(async (success) => {
+          RNFS.readFile(path, 'utf8').then((file) => console.log(file, 'rating text', rating));
           data.append('feedback_file', {
             uri: `file://${path}`,
             name: 'ratingFile.txt',
@@ -848,18 +789,15 @@ useEffect(() => {
           data.append('feedback_type', 'text');
           data.append('attachment_status', 'false');
           data.append('feedback_id', feedbackIDFromResponse);
-          let res = await fetch(
-            apiLink,
-            {
-              method: "POST",
-              headers: {
-                Pragma: "no-cache",
-                "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
-              },
-              body: data,
-            }
-          );
-          console.log("res", await res.json());
+          let res = await fetch(apiLink, {
+            method: 'POST',
+            headers: {
+              Pragma: 'no-cache',
+              'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
+            },
+            body: data,
+          });
+          console.log('res', await res.json());
           setshowrating(false);
           setreviewstate(false);
           Reset();
@@ -868,11 +806,11 @@ useEffect(() => {
             .then(() => {
               console.log('FILE DELETED');
             })
-            .catch(err => {
+            .catch((err) => {
               console.log(err.message);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           Alert.alert(
             languageResource.Alert,
             languageResource.Something_went_wrong_in_sharing_ratings,
@@ -914,10 +852,8 @@ useEffect(() => {
     } else {
       let path = RNFS.DocumentDirectoryPath + `/${Date.now()}test.txt`;
       RNFS.writeFile(path, feedbacktext, 'utf8')
-        .then(async success => {
-          RNFS.readFile(path, 'utf8').then(file =>
-            console.log(file, 'fileeee text'),
-          );
+        .then(async (success) => {
+          RNFS.readFile(path, 'utf8').then((file) => console.log(file, 'fileeee text'));
 
           const data = new FormData();
           data.append('feedback_file', {
@@ -930,32 +866,29 @@ useEffect(() => {
           data.append('feedback_type', 'text');
           data.append('attachment_status', 'false');
           data.append('feedback_id', 0);
-          let res = await fetch(
-            apiLink,
-            {
-              method: "POST",
-              headers: {
-                Pragma: "no-cache",
-                "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
-              },
-              body: data,
-            }
-          );
-          let a= await res.json()
-          console.log("res", await a.data.id);
-          await setfeedbackIDFromResponse(a.data.id)
+          let res = await fetch(apiLink, {
+            method: 'POST',
+            headers: {
+              Pragma: 'no-cache',
+              'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
+            },
+            body: data,
+          });
+          let a = await res.json();
+          console.log('res', await a.data.id);
+          await setfeedbackIDFromResponse(a.data.id);
           if (docuement) {
             await postDocumentFeedback(a.data.id);
-           } else {
-             setdocuement();
-           }
+          } else {
+            setdocuement();
+          }
           setfeedbacktext('');
           setreviewstate(true);
           RNFS.unlink(path)
             .then(() => {
               console.log('FILE DELETED');
             })
-            .catch(err => {
+            .catch((err) => {
               Alert.alert(
                 languageResource.Alert,
                 languageResource.Something_went_wrong_in_sharing_text,
@@ -969,7 +902,7 @@ useEffect(() => {
               console.log(err.message);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           Alert.alert(
             languageResource.Alert,
             languageResource.Something_went_wrong_in_sharing_text,
@@ -992,12 +925,7 @@ useEffect(() => {
 
   return (
     <ImageBackground
-      style={[
-        styles.mainContainer,
-        {
-          
-        },
-      ]}
+      style={[styles.mainContainer]}
       resizeMode={'cover'}
       source={
         languageID !== 1
@@ -1011,7 +939,7 @@ useEffect(() => {
         onRequestClose={() => setpicpreviewmodal(false)}>
         <View style={styles.innerContainer}>
           <Image
-            source={docuement?.uri ? {uri: docuement.uri} : feedbackphoto}
+            source={docuement?.uri ? { uri: docuement.uri } : feedbackphoto}
             resizeMode="contain"
             style={styles.documentStyling}
           />
@@ -1030,9 +958,7 @@ useEffect(() => {
         onRequestClose={() => setpdfpreview(false)}>
         <View style={styles.PDFModalCont}>
           <View style={styles.PDFModalInner}>
-            <TouchableOpacity
-              style={styles.CrossImgCont}
-              onPress={() => setpdfpreview(false)}>
+            <TouchableOpacity style={styles.CrossImgCont} onPress={() => setpdfpreview(false)}>
               <Image
                 source={require('../../assets/images/cross.png')}
                 resizeMode="contain"
@@ -1052,13 +978,13 @@ useEffect(() => {
         transparent
         animationType="fade">
         <View style={styles.videoView}>
-          <View style={{width, height}}>
-          <Video
+          <View style={{ width, height }}>
+            <Video
               controls
               resizeMode="cover"
               source={{ uri: videodata?.uri }} // Can be a URL or a local file.
               repeat
-              style={{ width: "100%", height: "100%" }}
+              style={{ width: '100%', height: '100%' }}
             />
           </View>
 
@@ -1071,26 +997,14 @@ useEffect(() => {
         </View>
       </Modal>
 
-      <SafeAreaView
-        style={[
-          styles.innercont,
-          {
-            marginLeft: languageID != 1 ? width * 0.5 : width * 0.15,
-            left: languageID != 1 ? -175 : undefined,
-            width: languageID != 1 ? '70%' : '85%',
-            
-          },
-        ]}>
+      <SafeAreaView style={[styles.innercont, { right: -20 }]}>
         <TouchableOpacity
-            style={[styles.feedbackButton,{
-              left:  (languageID == 1 && Platform.OS == 'ios') ? width * -0.075:
-              (languageID != 1 && Platform.OS == 'android')?  width * 0.80 :
-              (languageID == 1 && Platform.OS == 'android')?  width * -0.08 :
-              (languageID != 1 && Platform.OS == 'ios') ?width * 0.75:
-              undefined
+          style={[
+            styles.feedbackButton,
+            {
               // right: languageID != 1 && Platform.OS == 'ios'  ?  width * 0.075: undefined,
-            }]
-          }
+            },
+          ]}
           onPress={() => {
             onStopPlay();
             if (!feedbackSubmitted) {
@@ -1116,11 +1030,11 @@ useEffect(() => {
               style={[
                 styles.ratingView,
                 {
-                  marginLeft: languageID != 1 ? 0.5 : undefined,
-                  left: languageID != 1 ? 55 : 70,
+                  marginLeft: 0.5,
+                  left: 70,
                 },
               ]}>
-              <Text allowFontScaling={false} style={styles.ratingText}>
+              <Text allowFontScaling={false} style={styles.ratingText} numberOfLines={2}>
                 {languageResource.Thanks_for_your_feedback}
               </Text>
               <Image
@@ -1136,12 +1050,12 @@ useEffect(() => {
                 fullStar={require('../../assets/images/starfull.png')}
                 maxStars={5}
                 starSize={30}
-                buttonStyle={{paddingHorizontal: 7.5}}
+                buttonStyle={{ paddingHorizontal: 7.5 }}
                 rating={rating}
-                selectedStar={rating => setrating(rating)}
+                selectedStar={(rating) => setrating(rating)}
                 fullStarColor={'red'}
                 containerStyle={{
-                  transform: [{rotateY: languageID == 1 ? "0deg":"180deg"}],
+                  transform: [{ rotateY: languageID == 1 ? '0deg' : '180deg' }],
                 }}
               />
               <Text allowFontScaling={false} style={styles.reviewText}>
@@ -1158,35 +1072,18 @@ useEffect(() => {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View
-              style={[
-                styles.bottomView,
-                {left: languageID == 3 || languageID == 1 ? 0 : width * 0.1},
-              ]}>
+            <View style={[styles.bottomView]}>
               <Text style={styles.bottomText}>
-                {
-                  languageResource.This_feedback_will_be_used_for_quality_assurance_purposes
-                }
+                {languageResource.This_feedback_will_be_used_for_quality_assurance_purposes}
               </Text>
             </View>
           </>
         ) : (
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <SafeAreaView
-              style={[
-                styles.safeView,
-                {
-                  left:languageID != 1  ? width * 0.05 : undefined
-             
-                },
-              ]}>
+            <SafeAreaView style={[styles.safeView]}>
               {activestate != 0 && activestate != 5 && !keyboard && (
-                <View
-                  style={[
-                    styles.safeView2,
-                    {width: languageID != 1 ? '100%' : '90%'},
-                  ]}>
-                  {option.map(item => {
+                <View style={[styles.safeView2]}>
+                  {option.map((item) => {
                     return (
                       <View style={[styles.optionsView]}>
                         <TouchableOpacity style={styles.options}>
@@ -1194,8 +1091,7 @@ useEffect(() => {
                             style={[
                               styles.optionsInnerView,
                               {
-                                backgroundColor:
-                                  activestate == item.id ? '#147AF3' : '#fff',
+                                backgroundColor: activestate == item.id ? '#147AF3' : '#fff',
                               },
                             ]}>
                             <Image
@@ -1204,8 +1100,7 @@ useEffect(() => {
                               style={[
                                 styles.optionsImage,
                                 {
-                                  tintColor:
-                                    activestate == item.id ? '#fff' : 'grey',
+                                  tintColor: activestate == item.id ? '#fff' : 'grey',
                                 },
                               ]}
                             />
@@ -1213,9 +1108,7 @@ useEffect(() => {
                         </TouchableOpacity>
                         {activestate == item.id && (
                           <>
-                            <Text
-                              allowFontScaling={false}
-                              style={styles.optionsTitle}>
+                            <Text allowFontScaling={false} style={styles.optionsTitle}>
                               {item.title}
                             </Text>
                             <Image
@@ -1232,49 +1125,28 @@ useEffect(() => {
               )}
               {activestate == 0 ? (
                 <View style={styles.mainView}>
-                  <Text
-                    allowFontScaling={false}
-                    style={[
-                      styles.experienceView,
-                      {
-                        right:
-                        (languageID != 1 &&
-                          Platform.OS == 'ios' &&
-                          activestate != 0 &&
-                          activestate != 5 &&
-                          !keyboard)
-                            ? width * 0.1
-                            : undefined,
-                      },
-                    ]}>
+                  <Text allowFontScaling={false} style={[styles.experienceView]}>
                     {languageResource.How_was_your_experience}
                   </Text>
                   <FlatList
                     scrollEnabled={false}
-                    keyExtractor={item => item.id}
+                    keyExtractor={(item) => item.id}
                     contentContainerStyle={{
-                      alignSelf:
-                        languageID != 1 && Platform.OS == 'ios'
-                          ? 'flex-start'
-                          : 'center',
+                      alignSelf: 'center',
                     }}
                     numColumns={2}
                     data={option}
-                    renderItem={({item}) => {
+                    renderItem={({ item }) => {
                       return (
                         <View style={styles.outerView}>
-                          <TouchableOpacity
-                            style={styles.buttonPress}
-                            onPress={item.press}>
+                          <TouchableOpacity style={styles.buttonPress} onPress={item.press}>
                             <Image
                               resizeMode={'contain'}
                               style={styles.imagePress}
                               source={item.image}
                             />
                           </TouchableOpacity>
-                          <Text
-                            allowFontScaling={false}
-                            style={styles.titleText}>
+                          <Text allowFontScaling={false} style={styles.titleText}>
                             {' '}
                             {item.title}
                           </Text>
@@ -1284,7 +1156,7 @@ useEffect(() => {
                   />
                 </View>
               ) : activestate == 5 ? (
-                <View style={{alignItems: 'center'}}>
+                <View style={{ alignItems: 'center' }}>
                   <Text allowFontScaling={false} style={styles.textView}>
                     {languageResource.Audio_Feedback}
                   </Text>
@@ -1293,22 +1165,19 @@ useEffect(() => {
                     resizeMode="contain"
                     style={styles.textImage}
                   />
-                  <Text allowFontScaling={false} style={styles.textView} onPress={() => Linking.openSettings()}>
+                  <Text
+                    allowFontScaling={false}
+                    style={styles.textView}
+                    onPress={() => Linking.openSettings()}>
                     {languageResource.No_microphone_detected}
                   </Text>
                 </View>
               ) : (
-                <View
-                  style={[
-                    styles.Box,
-                    {width: languageID != 1 ? '84%' : '82.5%'},
-                  ]}>
+                <View style={[styles.Box, { width: '70%' }]}>
                   {reviewstate ? (
                     <>
                       <Text allowFontScaling={false} style={styles.Label}>
-                        {
-                          languageResource.Would_you_like_to_attach_any_supporting_documents
-                        }
+                        {languageResource.Would_you_like_to_attach_any_supporting_documents}
                       </Text>
                       <View>
                         <TouchableOpacity
@@ -1328,16 +1197,14 @@ useEffect(() => {
                             }
                           }}>
                           {docuement?.type == 'application/pdf' ? (
-                            <Text
-                              allowFontScaling={false}
-                              style={styles.viewPdf}>
+                            <Text allowFontScaling={false} style={styles.viewPdf}>
                               {languageResource.View_PDF}
                             </Text>
                           ) : (
                             <Image
                               source={
                                 docuement?.uri
-                                  ? {uri: docuement.uri}
+                                  ? { uri: docuement.uri }
                                   : require('../../assets/images/attachment.png')
                               }
                               resizeMode="contain"
@@ -1356,9 +1223,7 @@ useEffect(() => {
                           <TouchableOpacity
                             style={styles.documentButton}
                             onPress={() => setdocuement()}>
-                            <Text
-                              allowFontScaling={false}
-                              style={{color: '#147AF3'}}>
+                            <Text allowFontScaling={false} style={{ color: '#147AF3' }}>
                               {languageResource.Remove_Attachment}
                             </Text>
                           </TouchableOpacity>
@@ -1383,9 +1248,7 @@ useEffect(() => {
                             },
                           ]}
                           onPress={() => skip()}>
-                          <Text
-                            allowFontScaling={false}
-                            style={{color: '#147AF3'}}>
+                          <Text allowFontScaling={false} style={{ color: '#147AF3' }}>
                             {languageResource.Skip}
                           </Text>
                         </TouchableOpacity>
@@ -1399,7 +1262,7 @@ useEffect(() => {
                             },
                           ]}
                           onPress={() => {
-                            netinfo().then(res => {
+                            netinfo().then((res) => {
                               if (res) {
                                 Clear();
                               } else {
@@ -1416,9 +1279,7 @@ useEffect(() => {
                               }
                             });
                           }}>
-                          <Text
-                            allowFontScaling={false}
-                            style={{color: '#fff'}}>
+                          <Text allowFontScaling={false} style={{ color: '#fff' }}>
                             {languageResource.Continue}
                           </Text>
                         </TouchableOpacity>
@@ -1442,8 +1303,8 @@ useEffect(() => {
                           {recording == 3 ? (
                             <>
                               <AnimatedCircularProgress
-                                 size={100}
-                                 width={5}
+                                size={100}
+                                width={5}
                                 style={{
                                   alignSelf: 'center',
                                   justifyContent: 'space-evenly',
@@ -1455,13 +1316,11 @@ useEffect(() => {
                                 }}
                                 fill={playertime}
                                 tintColor="#1A73e9"
-                                onAnimationComplete={() =>
-                                  console.log('onAnimationComplete')
-                                }
+                                onAnimationComplete={() => console.log('onAnimationComplete')}
                                 ref={circularProgressref}
                                 backgroundColor="#dcdcdc"
                                 arcSweepAngle={360}>
-                                {fill => (
+                                {(fill) => (
                                   <>
                                     <Text
                                       allowFontScaling={false}
@@ -1477,9 +1336,7 @@ useEffect(() => {
                                           },
                                         ],
                                       }}>
-                                      {timeConverter(
-                                        (fill / 100) * playTimeraw,
-                                      )}{' '}
+                                      {timeConverter((fill / 100) * playTimeraw)}{' '}
                                     </Text>
                                   </>
                                 )}
@@ -1495,9 +1352,7 @@ useEffect(() => {
                                 }}>
                                 <TouchableOpacity
                                   onPress={
-                                    !audiopaused
-                                      ? () => onPausePlay()
-                                      : () => onResumePlay()
+                                    !audiopaused ? () => onPausePlay() : () => onResumePlay()
                                   }>
                                   <Text
                                     style={{
@@ -1514,8 +1369,8 @@ useEffect(() => {
                           ) : recording == 1 ? (
                             <TouchableOpacity onPress={() => onStopRecord()}>
                               <AnimatedCircularProgress
-                                 size={100}
-                                 width={5}
+                                size={100}
+                                width={5}
                                 style={{
                                   alignSelf: 'center',
                                   transform: [
@@ -1526,13 +1381,11 @@ useEffect(() => {
                                 }}
                                 fill={(seconds / 60) * 100}
                                 tintColor="#1A73e9"
-                                onAnimationComplete={() =>
-                                  console.log('onAnimationComplete')
-                                }
+                                onAnimationComplete={() => console.log('onAnimationComplete')}
                                 ref={circularProgressref}
                                 backgroundColor="#dcdcdc"
                                 arcSweepAngle={360}>
-                                {fill => (
+                                {(fill) => (
                                   <>
                                     <Image
                                       source={require('../../assets/images/recording.png')}
@@ -1596,8 +1449,7 @@ useEffect(() => {
                           activeOpacity={1}
                           style={{
                             width: languageID == 1 ? width * 0.6 : width * 0.6,
-                            height:
-                              languageID == 1 ? height * 0.2 : height * 0.19,
+                            height: languageID == 1 ? height * 0.2 : height * 0.19,
                             borderWidth: videodata ? 1 : 0,
                             alignSelf: 'center',
                           }}>
@@ -1613,18 +1465,14 @@ useEffect(() => {
                                 zIndex: 99,
                                 color: 'blue',
                               }}>
-                              <Icon
-                                name={'resize-full-screen'}
-                                size={30}
-                                color={'#444'}
-                              />
+                              <Icon name={'resize-full-screen'} size={30} color={'#444'} />
                             </TouchableOpacity>
                           )}
                           <Video
                             controls={true}
                             resizeMode="cover"
                             source={{ uri: videodata?.uri }} // Can be a URL or a local file.
-                            style={{ width: "100%", height: "100%" }}
+                            style={{ width: '100%', height: '100%' }}
                           />
                         </View>
                       ) : activestate == 3 ? (
@@ -1648,7 +1496,7 @@ useEffect(() => {
                       ) : activestate == 4 ? (
                         <View
                           style={{
-                            width: languageID != 1 ? width * 0.5 : width * 0.6,
+                            width: width * 0.6,
                             height: '50%',
                             alignSelf: 'center',
                           }}>
@@ -1673,25 +1521,17 @@ useEffect(() => {
                               maxLength={500}
                               keyboardType={'default'}
                               returnKeyType={'next'}
-                              onChangeText={text => setfeedbacktext(text)}
+                              onChangeText={(text) => setfeedbacktext(text)}
                               multiline
                             />
                           </View>
                           <Text
                             allowFontScaling={false}
                             style={{
-                              alignSelf:
-                                languageID == 1
-                                  ? 'flex-start'
-                                  : languageID != 1 && Platform.OS == 'android'
-                                  ? 'flex-end'
-                                  : 'flex-end',
-                                  color:'black',
+                              alignSelf: 'flex-start',
+                              color: 'black',
                             }}>
-                            {500 -
-                              feedbacktext?.length +
-                              ' ' +
-                              languageResource.charatcters_left}
+                            {500 - feedbacktext?.length + ' ' + languageResource.charatcters_left}
                           </Text>
                         </View>
                       ) : null}
@@ -1722,7 +1562,7 @@ useEffect(() => {
                               _handlevideo();
                             }
                           }}>
-                          <Text style={{color: '#fff', fontSize: width * 0.04}}>
+                          <Text style={{ color: '#fff', fontSize: width * 0.04 }}>
                             {activestate == 3
                               ? languageResource.Retake
                               : languageResource.Recapture}
@@ -1732,26 +1572,23 @@ useEffect(() => {
                         <>
                           <View
                             style={{
-                              flexDirection:
-                                languageID != 1 ? 'row-reverse' : 'row',
+                              flexDirection: 'row',
                               alignItems: 'center',
                               paddingHorizontal: '5%',
                             }}>
                             <CheckBox
                               disabled={false}
                               value={toggleCheckBox}
-                              onValueChange={newValue =>
-                                setToggleCheckBox(newValue)
-                              }
+                              onValueChange={(newValue) => setToggleCheckBox(newValue)}
                               boxType={'square'}
                               onCheckColor={'#147AF3'}
                               onTintColor={'#147AF3'}
-                              tintColors={{true: '#147AF3', false: 'grey'}}
+                              tintColors={{ true: '#147AF3', false: 'grey' }}
                             />
                             <Text
                               style={{
                                 marginHorizontal: Platform.OS == 'ios' ? 10 : 0,
-                                color:'black',
+                                color: 'black',
                               }}>
                               {languageResource.Add_Attachment}
                             </Text>
@@ -1768,8 +1605,7 @@ useEffect(() => {
                                         styles.LeftBtn,
                                         {
                                           width: '48%',
-                                          borderColor:
-                                            recording == 1 ? '#ececec' : '#444',
+                                          borderColor: recording == 1 ? '#ececec' : '#444',
                                         },
                                       ]}
                                       disabled={recording == 1}
@@ -1793,8 +1629,7 @@ useEffect(() => {
                                       <Text
                                         allowFontScaling={false}
                                         style={{
-                                          color:
-                                            recording == 1 ? '#ececec' : '#444',
+                                          color: recording == 1 ? '#ececec' : '#444',
                                           fontSize: width * 0.04,
                                         }}>
                                         {activestate == 3
@@ -1819,10 +1654,7 @@ useEffect(() => {
                                     onPress={() => {
                                       if (toggleCheckBox) {
                                         if (activestate == 1) {
-                                          if (
-                                            recording != 1 &&
-                                            recording != 0
-                                          ) {
+                                          if (recording != 1 && recording != 0) {
                                             setPlayTimeraw(0);
                                             setaudiopreview();
                                             onStopPlay();
@@ -1834,8 +1666,7 @@ useEffect(() => {
                                               [
                                                 {
                                                   text: languageResource.Ok,
-                                                  onPress: () =>
-                                                    console.log('OK Pressed'),
+                                                  onPress: () => console.log('OK Pressed'),
                                                 },
                                               ],
                                             );
@@ -1850,8 +1681,7 @@ useEffect(() => {
                                               [
                                                 {
                                                   text: languageResource.Ok,
-                                                  onPress: () =>
-                                                    console.log('OK Pressed'),
+                                                  onPress: () => console.log('OK Pressed'),
                                                 },
                                               ],
                                             );
@@ -1866,8 +1696,7 @@ useEffect(() => {
                                               [
                                                 {
                                                   text: languageResource.Ok,
-                                                  onPress: () =>
-                                                    console.log('OK Pressed'),
+                                                  onPress: () => console.log('OK Pressed'),
                                                 },
                                               ],
                                             );
@@ -1883,8 +1712,7 @@ useEffect(() => {
                                               [
                                                 {
                                                   text: languageResource.Ok,
-                                                  onPress: () =>
-                                                    console.log('OK Pressed'),
+                                                  onPress: () => console.log('OK Pressed'),
                                                 },
                                               ],
                                             );
@@ -1892,11 +1720,8 @@ useEffect(() => {
                                         }
                                       } else {
                                         if (activestate == 1) {
-                                          if (
-                                            recording != 1 &&
-                                            recording != 0
-                                          ) {
-                                            netinfo().then(res => {
+                                          if (recording != 1 && recording != 0) {
+                                            netinfo().then((res) => {
                                               if (res) {
                                                 setPlayTimeraw(0);
                                                 setaudiopreview();
@@ -1910,10 +1735,7 @@ useEffect(() => {
                                                   [
                                                     {
                                                       text: languageResource.Ok,
-                                                      onPress: () =>
-                                                        console.log(
-                                                          'OK Pressed',
-                                                        ),
+                                                      onPress: () => console.log('OK Pressed'),
                                                     },
                                                   ],
                                                 );
@@ -1926,15 +1748,14 @@ useEffect(() => {
                                               [
                                                 {
                                                   text: languageResource.Ok,
-                                                  onPress: () =>
-                                                    console.log('OK Pressed'),
+                                                  onPress: () => console.log('OK Pressed'),
                                                 },
                                               ],
                                             );
                                           }
                                         } else if (activestate == 2) {
                                           if (videodata) {
-                                            netinfo().then(res => {
+                                            netinfo().then((res) => {
                                               if (res) {
                                                 setshowrating(true);
                                                 Clear();
@@ -1945,10 +1766,7 @@ useEffect(() => {
                                                   [
                                                     {
                                                       text: languageResource.Ok,
-                                                      onPress: () =>
-                                                        console.log(
-                                                          'OK Pressed',
-                                                        ),
+                                                      onPress: () => console.log('OK Pressed'),
                                                     },
                                                   ],
                                                 );
@@ -1961,15 +1779,14 @@ useEffect(() => {
                                               [
                                                 {
                                                   text: languageResource.Ok,
-                                                  onPress: () =>
-                                                    console.log('OK Pressed'),
+                                                  onPress: () => console.log('OK Pressed'),
                                                 },
                                               ],
                                             );
                                           }
                                         } else if (activestate == 3) {
                                           if (feedbackphoto) {
-                                            netinfo().then(res => {
+                                            netinfo().then((res) => {
                                               if (res) {
                                                 setshowrating(true);
                                                 Clear();
@@ -1980,10 +1797,7 @@ useEffect(() => {
                                                   [
                                                     {
                                                       text: languageResource.Ok,
-                                                      onPress: () =>
-                                                        console.log(
-                                                          'OK Pressed',
-                                                        ),
+                                                      onPress: () => console.log('OK Pressed'),
                                                     },
                                                   ],
                                                 );
@@ -1996,8 +1810,7 @@ useEffect(() => {
                                               [
                                                 {
                                                   text: languageResource.Ok,
-                                                  onPress: () =>
-                                                    console.log('OK Pressed'),
+                                                  onPress: () => console.log('OK Pressed'),
                                                 },
                                               ],
                                             );
@@ -2014,14 +1827,14 @@ useEffect(() => {
                                         fontSize: width * 0.04,
                                       }}>
                                       {!toggleCheckBox
-                                      ? languageResource.Submit
-                                      : languageResource.Next}
+                                        ? languageResource.Submit
+                                        : languageResource.Next}
                                     </Text>
                                   </TouchableOpacity>
                                 </>
                               ) : (
                                 <TouchableOpacity
-                                  style={[styles.RightBtn, {width: '100%'}]}
+                                  style={[styles.RightBtn, { width: '100%' }]}
                                   onPress={() => {
                                     if (toggleCheckBox) {
                                       if (activestate == 1) {
@@ -2037,8 +1850,7 @@ useEffect(() => {
                                             [
                                               {
                                                 text: languageResource.Ok,
-                                                onPress: () =>
-                                                  console.log('OK Pressed'),
+                                                onPress: () => console.log('OK Pressed'),
                                               },
                                             ],
                                           );
@@ -2053,8 +1865,7 @@ useEffect(() => {
                                             [
                                               {
                                                 text: languageResource.Ok,
-                                                onPress: () =>
-                                                  console.log('OK Pressed'),
+                                                onPress: () => console.log('OK Pressed'),
                                               },
                                             ],
                                           );
@@ -2069,8 +1880,7 @@ useEffect(() => {
                                             [
                                               {
                                                 text: languageResource.Ok,
-                                                onPress: () =>
-                                                  console.log('OK Pressed'),
+                                                onPress: () => console.log('OK Pressed'),
                                               },
                                             ],
                                           );
@@ -2087,8 +1897,7 @@ useEffect(() => {
                                             [
                                               {
                                                 text: languageResource.Ok,
-                                                onPress: () =>
-                                                  console.log('OK Pressed'),
+                                                onPress: () => console.log('OK Pressed'),
                                               },
                                             ],
                                           );
@@ -2096,7 +1905,7 @@ useEffect(() => {
                                       }
                                     } else {
                                       if (feedbacktext?.length >= 6) {
-                                        netinfo().then(res => {
+                                        netinfo().then((res) => {
                                           if (res) {
                                             setshowrating(true);
                                             Clear();
@@ -2107,8 +1916,7 @@ useEffect(() => {
                                               [
                                                 {
                                                   text: languageResource.Ok,
-                                                  onPress: () =>
-                                                    console.log('OK Pressed'),
+                                                  onPress: () => console.log('OK Pressed'),
                                                 },
                                               ],
                                             );
@@ -2122,8 +1930,7 @@ useEffect(() => {
                                           [
                                             {
                                               text: languageResource.Ok,
-                                              onPress: () =>
-                                                console.log('OK Pressed'),
+                                              onPress: () => console.log('OK Pressed'),
                                             },
                                           ],
                                         );

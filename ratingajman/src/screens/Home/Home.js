@@ -1,34 +1,19 @@
-import React, {useEffect} from 'react';
-import {
-  Dimensions,
-  Image,
-  NativeModules,
-  Platform,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {setLanguage} from '../../store/actions';
+import React, { useEffect } from 'react';
+import { Dimensions, Image, NativeModules, Platform, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { setLanguage } from '../../store/actions';
 import styles from './styles';
 
-const {width} = Dimensions.get('window');
-const Home = ({onPressIcon, lang}) => {
+const { width } = Dimensions.get('window');
+const Home = ({ onPressIcon, lang }) => {
   const dispatch = useDispatch();
-  const languageID = useSelector(state => state.resourcesReducer.languageID);
+  const languageID = useSelector((state) => state.resourcesReducer.languageID);
   useEffect(() => {
     dispatch(setLanguage(lang));
-   
   }, [lang]);
 
   return (
-    <View
-      style={[
-        styles.Container,
-        {
-          left: lang != 1 && Platform.OS == 'android' ? -50 : undefined,
-          right: lang == 1 ? -50 : 5,
-        },
-      ]}>
+    <View style={[styles.Container]}>
       <TouchableOpacity
         style={[
           styles.ImgCont,
@@ -45,9 +30,9 @@ const Home = ({onPressIcon, lang}) => {
           }
           resizeMode="contain"
           style={{
-            width: '100%',
-            height: '100%',
-            width: lang != 1 && Platform.OS == 'ios' ? 60 : undefined,
+            height: 161,
+            width: 70,
+            right: -2,
           }}
         />
       </TouchableOpacity>

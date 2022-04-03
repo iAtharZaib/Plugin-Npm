@@ -1,8 +1,8 @@
-import {Dimensions, StyleSheet, Platform} from 'react-native';
-const {width, height} = Dimensions.get('window');
+import { Dimensions, StyleSheet, Platform } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
-  mainContainer: {flex: 1},
+  mainContainer: { flex: 1, width: width, height: height },
   item: {
     padding: 20,
     marginVertical: 8,
@@ -46,6 +46,7 @@ export default StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    marginTop: 30
   },
   Label: {
     fontWeight: '500',
@@ -132,7 +133,7 @@ export default StyleSheet.create({
     color: 'white',
     bottom: '10%',
     textDecorationLine: 'underline',
-    color:'black'
+    color: 'black',
   },
   videoView: {
     flex: 1,
@@ -146,57 +147,55 @@ export default StyleSheet.create({
     color: '#fff',
     fontSize: width * 0.045,
     bottom: '5%',
-    color:'black',
+    color: 'black',
     textDecorationLine: 'underline',
   },
-  documentStyling: {width: '100%', height: '100%'},
+  documentStyling: { width: '100%', height: '100%', alignSelf: 'flex-end' },
   feedbackButton: {
     width: width * 0.1,
     height: width * 0.125,
     position: 'absolute',
     zIndex: 99,
-    left: width * 0.075,
   },
   ratingView: {
-    width: width * 0.5,
+    width: width * 0.7,
     height: height * 0.6,
     marginLeft: width * 0.17,
-    alignItems: "center",
-    justifyContent: "space-evenly",
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   ratingText: {
-    fontWeight: "500",
-    color: "#fff",
+    fontWeight: '500',
+    color: '#fff',
     fontSize: width * 0.055,
-    textAlign: "center",
-    paddingHorizontal: "15%",
+    textAlign: 'center',
   },
   ratingImage: {
     width: width * 0.3,
     height: width * 0.3,
     marginVertical: height * 0.03,
   },
-  ratingFont: { fontWeight: "500", color:"black" },
+  ratingFont: { fontWeight: '500', color: 'white' },
   reviewText: {
-    fontWeight: "bold",
-    color: "#fff",
+    fontWeight: 'bold',
+    color: '#fff',
     minHeight: height * 0.07,
     fontSize: width * 0.04,
-    textAlign: "center",
+    textAlign: 'center',
     width: width * 0.7,
   },
   reviewButton: {
     borderRadius: 10,
-    backgroundColor: "#147AF3",
+    backgroundColor: '#147AF3',
     padding: height * 0.01,
     width: width * 0.3,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   submitButton: {
-    color: "#fff",
+    color: '#fff',
     fontSize: width * 0.04,
-    textAlign: "center",
-    width: "100%",
+    textAlign: 'center',
+    width: '100%',
   },
   bottomText: {
     textAlign: 'center',
@@ -204,6 +203,7 @@ export default StyleSheet.create({
     fontSize: width * 0.03,
   },
   bottomView: {
+    width: '100%',
     alignItems: 'center',
     position: 'absolute',
     bottom: '2.5%',
@@ -216,7 +216,7 @@ export default StyleSheet.create({
   safeView2: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '90%',
+    width: '80%',
     position: 'absolute',
     top: height * 0.08,
   },
@@ -228,7 +228,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     borderRadius: (width * 0.165) / 2,
   },
-  optionsView: {paddingHorizontal: 20},
+  optionsView: { paddingHorizontal: 10 },
   optionsInnerView: {
     width: width * 0.15,
     height: width * 0.15,
@@ -253,6 +253,7 @@ export default StyleSheet.create({
   },
   mainView: {
     width: '80%',
+    alignItems: 'center',
   },
   experienceView: {
     fontWeight: '500',
@@ -288,7 +289,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
   },
-  textView: {fontSize: width * 0.05, color: '#fff'},
+  textView: { fontSize: width * 0.05, color: '#fff' },
   textImage: {
     width: width * 0.25,
     height: width * 0.25,
@@ -309,7 +310,7 @@ export default StyleSheet.create({
   warningText: {
     fontSize: width * 0.03,
     textAlign: 'center',
-    color:'black',
+    color: 'black',
   },
   pdfStyling: {
     flexDirection: 'row',

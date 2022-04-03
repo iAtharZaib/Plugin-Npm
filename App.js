@@ -15,7 +15,7 @@ const App = () => {
     <SafeAreaView
       style={{flex: 1, justifyContent: 'center', backgroundColor: '#e0ae13'}}>
       <View style={{flex: 1}}>
-        <FloatingRating lang={1} />
+        <FloatingRating lang={2} />
       </View>
     </SafeAreaView>
   );

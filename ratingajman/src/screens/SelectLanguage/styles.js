@@ -1,5 +1,5 @@
-import {Dimensions, StyleSheet} from 'react-native';
-const {width, height} = Dimensions.get('window');
+import { Dimensions, StyleSheet } from 'react-native';
+const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
   item2: {
@@ -14,6 +14,8 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingLeft: 30,
+    flexDirection: 'row',
   },
   backButton: {
     width: width * 0.1,
@@ -22,7 +24,7 @@ export default StyleSheet.create({
     zIndex: 99,
     left: width * 0.075,
   },
-  image: {width: '100%', height: '100%'},
+  image: { width: '100%', height: '100%', alignSelf: 'flex-end' },
   feedbackView: {
     width: '100%',
     justifyContent: 'center',
@@ -53,5 +55,5 @@ export default StyleSheet.create({
     width: '70%',
     borderRadius: 30,
   },
-  activeNonActive: {width: 20, height: 20},
+  activeNonActive: { width: 20, height: 20 },
 });
