@@ -327,6 +327,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
   };
 
   const _handlevideo = () => {
+    setvideodata(null);
     try {
       launchCamera(
         {
@@ -349,7 +350,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
                     duration: res.assets[0].duration,
                   };
                   setvideodata(videoData);
-                  postVideoFeedback(videoData);
+                  // postVideoFeedback(videoData);
                 });
               } else {
                 const videoDataAndroid = {
@@ -402,13 +403,28 @@ const ProvideFeedback = ({ onClose, lang }) => {
           ],
         );
       } else {
-        if (res?.type == 'application/pdf') {
+        if (res?.type == 'application/pdf' || res[0]?.type == 'application/pdf') {
           setdocuement({
             uri: res.uri,
             cache: true,
             type: res.type,
-          });}
-       else if (
+          });
+          {
+            setdocuement(
+              res[0] != undefined
+                ? {
+                    uri: res[0].uri,
+                    cache: true,
+                    type: res[0].type,
+                  }
+                : {
+                    uri: res.uri,
+                    cache: true,
+                    type: res.type,
+                  },
+            );
+          }
+        } else if (
           res.type == 'image/jpeg' ||
           res.type == 'image/jpg' ||
           res.type == 'image/png' ||
@@ -1055,7 +1071,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
                 selectedStar={(rating) => setrating(rating)}
                 fullStarColor={'red'}
                 containerStyle={{
-                  transform: [{ rotateY: lang == 1 ? '0deg' : '180deg' }],
+                  transform: [{ translateX: lang == 1 ? 1 : -1 }],
                 }}
               />
               <Text allowFontScaling={false} style={styles.reviewText}>
@@ -1188,10 +1204,11 @@ const ProvideFeedback = ({ onClose, lang }) => {
                                 setpdfpreview(true);
                               }
                             } else if (
-                            docuement?.type == 'image/jpeg' ||
-                            docuement?.type == 'image/jpg' ||
-                            docuement?.type == 'image/png' ||
-                            docuement?.type == 'image/heic' ) {
+                              docuement?.type == 'image/jpeg' ||
+                              docuement?.type == 'image/jpg' ||
+                              docuement?.type == 'image/png' ||
+                              docuement?.type == 'image/heic'
+                            ) {
                               if (docuement) {
                                 setpicpreviewmodal(true);
                               }
@@ -1473,7 +1490,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
                             </TouchableOpacity>
                           )}
                           <Video
-                            controls={true}
+                            controls
                             resizeMode="cover"
                             source={{ uri: videodata?.uri }} // Can be a URL or a local file.
                             style={{ width: '100%', height: '100%' }}
