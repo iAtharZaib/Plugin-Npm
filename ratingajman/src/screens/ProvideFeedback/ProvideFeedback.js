@@ -402,7 +402,13 @@ const ProvideFeedback = ({ onClose, lang }) => {
           ],
         );
       } else {
-        if (
+        if (res?.type == 'application/pdf') {
+          setdocuement({
+            uri: res.uri,
+            cache: true,
+            type: res.type,
+          });}
+       else if (
           res.type == 'image/jpeg' ||
           res.type == 'image/jpg' ||
           res.type == 'image/png' ||
@@ -415,12 +421,6 @@ const ProvideFeedback = ({ onClose, lang }) => {
           {
             setdocuement(res[0] != undefined ? res[0] : res);
           }
-        } else if (res.type == 'application/pdf') {
-          setdocuement({
-            uri: res.uri,
-            cache: true,
-            type: res.type,
-          });
         } else {
           Alert.alert(
             languageResource.Alert,
@@ -1187,7 +1187,11 @@ const ProvideFeedback = ({ onClose, lang }) => {
                               if (docuement) {
                                 setpdfpreview(true);
                               }
-                            } else if (docuement?.type == 'image/jpeg') {
+                            } else if (
+                            docuement?.type == 'image/jpeg' ||
+                            docuement?.type == 'image/jpg' ||
+                            docuement?.type == 'image/png' ||
+                            docuement?.type == 'image/heic' ) {
                               if (docuement) {
                                 setpicpreviewmodal(true);
                               }
