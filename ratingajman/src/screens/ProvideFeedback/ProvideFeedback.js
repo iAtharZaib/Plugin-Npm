@@ -1055,7 +1055,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
                 selectedStar={(rating) => setrating(rating)}
                 fullStarColor={'red'}
                 containerStyle={{
-                  transform: [{ rotateY: languageID == 1 ? '0deg' : '180deg' }],
+                  transform: [{ rotateY: lang == 1 ? '0deg' : '180deg' }],
                 }}
               />
               <Text allowFontScaling={false} style={styles.reviewText}>

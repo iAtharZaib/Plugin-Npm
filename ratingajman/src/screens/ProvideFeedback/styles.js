@@ -200,7 +200,7 @@ export default StyleSheet.create({
   bottomText: {
     textAlign: 'center',
     color: '#fff',
-    fontSize: width * 0.03,
+    fontSize: width * 0.025,
   },
   bottomView: {
     width: '100%',

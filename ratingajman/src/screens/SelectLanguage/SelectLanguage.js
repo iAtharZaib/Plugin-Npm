@@ -37,10 +37,7 @@ const SelectLanguage = ({ onClose, onLanguageSelect, lang }) => {
   return (
     <ImageBackground
       style={[
-        styles.imageBackground,
-        {
-          flexDirection: lang != 1 && Platform.OS == 'android' ? 'row-reverse' : 'row',
-        },
+        styles.imageBackground
       ]}
       resizeMode={'cover'}
       source={

@@ -1,1 +1,0 @@
-export { FloatingWidgetConnected as FloatingWidget } from './container';
