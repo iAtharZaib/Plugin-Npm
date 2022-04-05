@@ -98,7 +98,10 @@ const ProvideFeedback = ({ onClose, lang }) => {
 
   function reset() {
     setSeconds(0);
+    setrecording(0)
+    setplayertime(0)
     setIsActive(false);
+    onPausePlay();
   }
   const onPausePlay = async () => {
     await audioRecorderPlayer.pausePlayer();
@@ -1490,10 +1493,11 @@ const ProvideFeedback = ({ onClose, lang }) => {
                             </TouchableOpacity>
                           )}
                           <Video
-                            controls
+                            // controls={true}
+                             paused={true}
                             resizeMode="cover"
                             source={{ uri: videodata?.uri }} // Can be a URL or a local file.
-                            style={{ width: '100%', height: '100%' }}
+                            style={{ width: "100%", height: "100%" }}
                           />
                         </View>
                       ) : activestate == 3 ? (
@@ -1577,6 +1581,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
                               setrecording(0);
                               setPlayTimeraw(0);
                               reset();
+                              onPausePlay();
                             } else if (activestate == 2) {
                               onStopPlay();
                               // setvideodata(null);
@@ -1638,9 +1643,9 @@ const ProvideFeedback = ({ onClose, lang }) => {
                                         } else if (activestate == 1) {
                                           setrecordingdata(null);
                                           setrecording(0);
-
                                           setPlayTimeraw(0);
                                           reset();
+                                          onPausePlay();
                                         } else if (activestate == 2) {
                                           onStopPlay();
                                           // setvideodata(null);

@@ -146,7 +146,7 @@ export default StyleSheet.create({
     alignSelf: 'center',
     color: '#fff',
     fontSize: width * 0.045,
-    bottom: '5%',
+    bottom: '15%',
     color: 'black',
     textDecorationLine: 'underline',
   },
