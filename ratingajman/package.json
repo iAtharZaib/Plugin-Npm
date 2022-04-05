@@ -1,6 +1,6 @@
 {
   "name": "floating-rating-package",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "main": "src/index.js",
   "scripts": {
     "android": "react-native run-android",
