@@ -999,7 +999,6 @@ const ProvideFeedback = ({ onClose, lang }) => {
         <View style={styles.videoView}>
           <View style={{ width, height }}>
             <Video
-              controls
               resizeMode="cover"
               source={{ uri: videodata?.uri }} // Can be a URL or a local file.
               repeat
@@ -1493,9 +1492,8 @@ const ProvideFeedback = ({ onClose, lang }) => {
                             </TouchableOpacity>
                           )}
                           <Video
-                            // controls={true}
-                             paused={true}
                             resizeMode="cover"
+                            repeat
                             source={{ uri: videodata?.uri }} // Can be a URL or a local file.
                             style={{ width: "100%", height: "100%" }}
                           />
