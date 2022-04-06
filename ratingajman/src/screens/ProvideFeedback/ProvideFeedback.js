@@ -98,8 +98,8 @@ const ProvideFeedback = ({ onClose, lang }) => {
 
   function reset() {
     setSeconds(0);
-    setrecording(0)
-    setplayertime(0)
+    setrecording(0);
+    setplayertime(0);
     setIsActive(false);
     onPausePlay();
   }
@@ -311,79 +311,263 @@ const ProvideFeedback = ({ onClose, lang }) => {
   }
 
   const _onOpenActionSheet = () => {
-    try {
-      launchCamera(
-        {
-          cameraType: 'front',
-        },
-
-        (res) => {
-          if (res.assets) {
-            setusercancelled(false);
-            setfeedbackphoto(res.assets[0]);
-          } else {
-            setusercancelled(true);
-          }
-        },
-      );
-    } catch (error) {}
+    if (Platform.OS === 'android') {
+      try {
+        const grants = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ]);
+        if (
+          grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          grants['android.permission.READ_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          grants['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED
+        ) {
+          try {
+            launchCamera(
+              {
+                cameraType: 'front',
+              },
+      
+              (res) => {
+                if (res.assets) {
+                  setusercancelled(false);
+                  setfeedbackphoto(res.assets[0]);
+                } else {
+                  setusercancelled(true);
+                }
+              },
+            );
+          } catch (error) {}
+        } 
+        else {
+          console.log('All required permissions not granted');
+          Linking.openSettings();
+          return;
+        }
+      } catch (err) {
+        console.warn(err);
+        return;
+      }
+    } 
+    if (Platform.OS == 'ios') {
+      console.log('if ch;aaa');
+      check(PERMISSIONS.IOS.MICROPHONE).then((result) => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              'This feature is not available (on this device / in this context)',
+            );
+            break;
+          case RESULTS.DENIED:
+            console.log(
+              'The permission has not been requested / is denied but requestable',
+            );
+            request(PERMISSIONS.IOS.MICROPHONE);
+            break;
+          case RESULTS.LIMITED:
+            console.log('The permission is limited: some actions are possible');
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            try {
+             
+                launchCamera(
+                  {
+                    cameraType: 'front',
+                  },
+          
+                  (res) => {
+                    if (res.assets) {
+                      setusercancelled(false);
+                      setfeedbackphoto(res.assets[0]);
+                    } else {
+                      setusercancelled(true);
+                    }
+                  },
+                );
+            } catch (error) {
+              alert(error.message);
+            }
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            Linking.openSettings();
+            break;
+        }
+      });
+    }
+   
   };
 
-  const _handlevideo = () => {
-    setvideodata(null);
-    try {
-      launchCamera(
-        {
-          videoQuality: 'high',
-          mediaType: 'video',
-          durationLimit: 60,
-          cameraType: 'front',
-        },
-        (res) => {
-          if (res?.assets) {
-            if (res?.assets[0].duration >= 5) {
-              setusercancelled(false);
-              if (Platform.OS == 'ios') {
-                const filename = Date.now().toString();
+  const _handlevideo = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const grants = await PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        ]);
+        if (
+          grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          grants['android.permission.READ_EXTERNAL_STORAGE'] ===
+            PermissionsAndroid.RESULTS.GRANTED &&
+          grants['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED
+        ) {
+          try {
+            launchCamera(
+              {
+                videoQuality: 'high',
+                mediaType: 'video',
+                durationLimit: 60,
+                cameraType: 'front',
+              },
+              (res) => {
+                if (res?.assets) {
+                  if (res?.assets[0].duration >= 5) {
+                    setusercancelled(false);
+                    if (Platform.OS == 'ios') {
+                      const filename = Date.now().toString();
 
-                MovToMp4.convertMovToMp4(res.assets[0].uri, filename).then(function (results) {
-                  const videoData = {
-                    uri: results,
-                    fileName: filename + '.mp4',
-                    duration: res.assets[0].duration,
-                  };
-                  setvideodata(videoData);
-                  // postVideoFeedback(videoData);
-                });
-              } else {
-                const videoDataAndroid = {
-                  uri: res.assets[0].uri,
-                  duration: res.assets[0].duration,
-                  fileName: res.assets[0].fileName,
-                  fileSize: res.assets[0].fileSize,
-                };
-                setvideodata(videoDataAndroid);
-              }
-            } else {
-              setusercancelled(true);
-              Alert.alert(
-                languageResource.Alert,
-                languageResource.Video_should_be_more_than_5_seconds,
-                [
-                  {
-                    text: languageResource.Ok,
-                    onPress: () => console.log('OK Pressed'),
-                  },
-                ],
-              );
-            }
-          } else {
-            setusercancelled(true);
+                      MovToMp4.convertMovToMp4(res.assets[0].uri, filename).then(function (
+                        results,
+                      ) {
+                        const videoData = {
+                          uri: results,
+                          fileName: filename + '.mp4',
+                          duration: res.assets[0].duration,
+                        };
+                        setvideodata(videoData);
+                        // postVideoFeedback(videoData);
+                      });
+                    } else {
+                      const videoDataAndroid = {
+                        uri: res.assets[0].uri,
+                        duration: res.assets[0].duration,
+                        fileName: res.assets[0].fileName,
+                        fileSize: res.assets[0].fileSize,
+                      };
+                      setvideodata(videoDataAndroid);
+                    }
+                  } else {
+                    setusercancelled(true);
+                    Alert.alert(
+                      languageResource.Alert,
+                      languageResource.Video_should_be_more_than_5_seconds,
+                      [
+                        {
+                          text: languageResource.Ok,
+                          onPress: () => console.log('OK Pressed'),
+                        },
+                      ],
+                    );
+                  }
+                } else {
+                  setusercancelled(true);
+                }
+              },
+            );
+          } catch (error) {
+            alert(error.message);
           }
-        },
-      );
-    } catch (error) {
-      alert(error.message);
+          
+        } 
+        else {
+          console.log('All required permissions not granted');
+          Linking.openSettings();
+          return;
+        }
+      } catch (err) {
+        console.warn(err);
+        return;
+      }
+    } 
+    if (Platform.OS == 'ios') {
+      console.log('if ch;aaa');
+      check(PERMISSIONS.IOS.MICROPHONE).then((result) => {
+        switch (result) {
+          case RESULTS.UNAVAILABLE:
+            console.log(
+              'This feature is not available (on this device / in this context)',
+            );
+            break;
+          case RESULTS.DENIED:
+            console.log(
+              'The permission has not been requested / is denied but requestable',
+            );
+            request(PERMISSIONS.IOS.MICROPHONE);
+            break;
+          case RESULTS.LIMITED:
+            console.log('The permission is limited: some actions are possible');
+            break;
+          case RESULTS.GRANTED:
+            console.log('The permission is granted');
+            try {
+              launchCamera(
+                {
+                  videoQuality: 'high',
+                  mediaType: 'video',
+                  durationLimit: 60,
+                  cameraType: 'front',
+                },
+                (res) => {
+                  if (res?.assets) {
+                    if (res?.assets[0].duration >= 5) {
+                      setusercancelled(false);
+                      if (Platform.OS == 'ios') {
+                        const filename = Date.now().toString();
+  
+                        MovToMp4.convertMovToMp4(res.assets[0].uri, filename).then(function (
+                          results,
+                        ) {
+                          const videoData = {
+                            uri: results,
+                            fileName: filename + '.mp4',
+                            duration: res.assets[0].duration,
+                          };
+                          setvideodata(videoData);
+                          // postVideoFeedback(videoData);
+                        });
+                      } else {
+                        const videoDataAndroid = {
+                          uri: res.assets[0].uri,
+                          duration: res.assets[0].duration,
+                          fileName: res.assets[0].fileName,
+                          fileSize: res.assets[0].fileSize,
+                        };
+                        setvideodata(videoDataAndroid);
+                      }
+                    } else {
+                      setusercancelled(true);
+                      Alert.alert(
+                        languageResource.Alert,
+                        languageResource.Video_should_be_more_than_5_seconds,
+                        [
+                          {
+                            text: languageResource.Ok,
+                            onPress: () => console.log('OK Pressed'),
+                          },
+                        ],
+                      );
+                    }
+                  } else {
+                    setusercancelled(true);
+                  }
+                },
+              );
+            } catch (error) {
+              alert(error.message);
+            }
+            break;
+          case RESULTS.BLOCKED:
+            console.log('The permission is denied and not requestable anymore');
+            Linking.openSettings();
+            break;
+        }
+      });
     }
   };
 
@@ -465,13 +649,38 @@ const ProvideFeedback = ({ onClose, lang }) => {
 
   const onStartCamera = async (photo) => {
     if (Platform.OS === 'android') {
-      try {
-        await postImageFeedback(photo);
-      } catch (err) {
-        return;
-      }
+      check(PERMISSIONS.ANDROID.CAMERA)
+        .then((result) => {
+          switch (result) {
+            case RESULTS.UNAVAILABLE:
+              console.log(
+                'Photo Library feature is not available (on this device / in this context)',
+              );
+              // Linking.openSettings();
+              break;
+            case RESULTS.DENIED:
+              console.log(
+                'Photo Library permission has not been requested / is denied but requestable',
+              );
+              request(PERMISSIONS.ANDROID.CAMERA);
+              break;
+            case RESULTS.LIMITED:
+              console.log('Photo Library permission is limited: some actions are possible');
+              break;
+            case RESULTS.GRANTED:
+              console.log('Photo Library permission is granted');
+              postImageFeedback(photo);
+              break;
+            case RESULTS.BLOCKED:
+              console.log('Photo Library permission is denied and not requestable anymore');
+              Linking.openSettings();
+              break;
+          }
+        })
+        .catch((error) => {
+          // …
+        });
     }
-
     if (Platform.OS == 'ios') {
       check(PERMISSIONS.IOS.CAMERA).then((result) => {
         switch (result) {
@@ -1082,9 +1291,25 @@ const ProvideFeedback = ({ onClose, lang }) => {
               <TouchableOpacity
                 style={styles.reviewButton}
                 onPress={() => {
+                  netinfo().then((res) => {
+                    if (res) {    
                   postRatingFeedback();
                   onClose();
-                }}>
+                    } else {
+                      Alert.alert(
+                        languageResource.Alert,
+                        languageResource.No_internet_connection,
+                        [
+                          {
+                            text: languageResource.Ok,
+                            onPress: () => console.log('OK Pressed'),
+                          },
+                        ],
+                      );
+                    }
+                  });
+                }}
+                >
                 <Text allowFontScaling={false} style={styles.submitButton}>
                   {languageResource.Submit}
                 </Text>
@@ -1270,7 +1495,25 @@ const ProvideFeedback = ({ onClose, lang }) => {
                               backgroundColor: 'white',
                             },
                           ]}
-                          onPress={() => skip()}>
+                            onPress={() => {
+                            netinfo().then((res) => {
+                              if (res) {
+                                skip()
+                              } else {
+                                Alert.alert(
+                                  languageResource.Alert,
+                                  languageResource.No_internet_connection,
+                                  [
+                                    {
+                                      text: languageResource.Ok,
+                                      onPress: () => console.log('OK Pressed'),
+                                    },
+                                  ],
+                                );
+                              }
+                            });
+                          }}
+                          >
                           <Text allowFontScaling={false} style={{ color: '#147AF3' }}>
                             {languageResource.Skip}
                           </Text>
@@ -1495,7 +1738,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
                             resizeMode="cover"
                             repeat
                             source={{ uri: videodata?.uri }} // Can be a URL or a local file.
-                            style={{ width: "100%", height: "100%" }}
+                            style={{ width: '100%', height: '100%' }}
                           />
                         </View>
                       ) : activestate == 3 ? (
