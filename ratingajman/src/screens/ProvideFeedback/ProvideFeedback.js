@@ -310,21 +310,19 @@ const ProvideFeedback = ({ onClose, lang }) => {
     setaudiopreview();
   }
 
-  const _onOpenActionSheet = () => {
+  const _onOpenActionSheet = async () => {
     if (Platform.OS === 'android') {
-      try {
-        const grants = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        ]);
-        if (
-          grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          grants['android.permission.READ_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          grants['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED
-        ) {
+          try {
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+              {
+                title: 'Camera Permission',
+                message: 'Ajman Ae app wants to use your camera',
+              },
+            );
+            if (
+              granted['android.permission.CAMERA'] === PermissionsAndroid.RESULTS.GRANTED
+            ) {
           try {
             launchCamera(
               {
@@ -354,7 +352,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
     } 
     if (Platform.OS == 'ios') {
       console.log('if ch;aaa');
-      check(PERMISSIONS.IOS.MICROPHONE).then((result) => {
+      check(PERMISSIONS.IOS.CAMERA).then((result) => {
         switch (result) {
           case RESULTS.UNAVAILABLE:
             console.log(
@@ -365,7 +363,8 @@ const ProvideFeedback = ({ onClose, lang }) => {
             console.log(
               'The permission has not been requested / is denied but requestable',
             );
-            request(PERMISSIONS.IOS.MICROPHONE);
+            request(PERMISSIONS.IOS.CAMERA);
+            Linking.openSettings();
             break;
           case RESULTS.LIMITED:
             console.log('The permission is limited: some actions are possible');
