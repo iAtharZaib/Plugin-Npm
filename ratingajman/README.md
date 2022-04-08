@@ -1,25 +1,25 @@
-# ajman-feedback-plugin
+# floating-rating-package
 
 Plugin made on React Native purely for Ajman App
 
 ## 🔧 Install
 
-ajman-feedback-plugin is available on npm. It can be installed with the following command:
+floating-rating-package is available on npm. It can be installed with the following command:
 
 ```
-npm install ajman-feedback-plugin --save
+npm install floating-rating-package --save
 ```
 
-ajman-feedback-plugin is available on yarn as well. It can be installed with the following command:
+floating-rating-package is available on yarn as well. It can be installed with the following command:
 
 ```
-yarn add ajman-feedback-plugin
+yarn add floating-rating-package
 ```
 
 ## Usage
 
 ```js
-import {FloatingRating} from 'ajman-feedback-plugin';
+import {FloatingRating} from 'floating-rating-package';
 
 export default function App() {
   return (
@@ -62,11 +62,11 @@ Please make sure to install these before using the plugin
 ```
 ## ❗ Issues
 
-If you think any of the `ajman-feedback-plugin` can be improved, please do open a PR with any updates and submit any issues. Also, I will continue to improve this, so you might want to watch/star this repository to revisit.
+If you think any of the `floating-rating-package` can be improved, please do open a PR with any updates and submit any issues. Also, I will continue to improve this, so you might want to watch/star this repository to revisit.
 
 <!-- ## 🌟 Contribution
 
-We'd love to have your helping hand on contributions to `ajman-feedback-plugin` by forking and sending a pull request!
+We'd love to have your helping hand on contributions to `floating-rating-package` by forking and sending a pull request!
 
 Your contributions are heartily ♡ welcome, recognized and appreciated. (✿◠‿◠)
 
@@ -122,7 +122,7 @@ Props Lang for Floating Rating
 
 ## ✨ Contributors
 
-### Athar Zaib
+## Athar Zaib
 ### Ghazanfar Ali
 ### Rabee Javed 
 ### Osama Zulfiqar
