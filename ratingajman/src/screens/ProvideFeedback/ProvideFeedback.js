@@ -866,12 +866,16 @@ const ProvideFeedback = ({ onClose, lang }) => {
       }
       setrecordingdata(null);
     } catch (error) {
-      Alert.alert(languageResource.Alert, languageResource.Something_went_wrong_in_sharing_audio, [
-        {
-          text: languageResource.Ok,
-          onPress: () => console.log('OK Pressed'),
-        },
-      ]);
+      Alert.alert(
+        languageResource.Alert,
+        languageResource.No_internet_connection,
+        [
+          {
+            text: languageResource.Ok,
+            onPress: () => console.log('OK Pressed'),
+          },
+        ],
+      );
       setrecordingdata(null);
     }
   };
@@ -907,12 +911,16 @@ const ProvideFeedback = ({ onClose, lang }) => {
         setdocuement();
       }
     } catch (error) {
-      Alert.alert(languageResource.Alert, languageResource.Something_went_wrong_in_sharing_video, [
-        {
-          text: languageResource.Ok,
-          onPress: () => console.log('OK Pressed'),
-        },
-      ]);
+      Alert.alert(
+        languageResource.Alert,
+        languageResource.No_internet_connection,
+        [
+          {
+            text: languageResource.Ok,
+            onPress: () => console.log('OK Pressed'),
+          },
+        ],
+      );
       setvideodata(null);
     }
   };
@@ -949,12 +957,16 @@ const ProvideFeedback = ({ onClose, lang }) => {
       }
       setfeedbackphoto(null);
     } catch (error) {
-      Alert.alert(languageResource.Alert, languageResource.Something_went_wrong_in_sharing_image, [
-        {
-          text: languageResource.Ok,
-          onPress: () => console.log('OK Pressed'),
-        },
-      ]);
+      Alert.alert(
+        languageResource.Alert,
+        languageResource.No_internet_connection,
+        [
+          {
+            text: languageResource.Ok,
+            onPress: () => console.log('OK Pressed'),
+          },
+        ],
+      );
       setfeedbackphoto(null);
     }
   };
@@ -986,7 +998,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
     } catch (error) {
       Alert.alert(
         languageResource.Alert,
-        languageResource.Something_went_wrong_in_sharing_attachment,
+        languageResource.No_internet_connection,
         [
           {
             text: languageResource.Ok,
@@ -1040,7 +1052,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
         .catch((err) => {
           Alert.alert(
             languageResource.Alert,
-            languageResource.Something_went_wrong_in_sharing_ratings,
+            languageResource.No_internet_connection,
             [
               {
                 text: languageResource.Ok,
@@ -1053,7 +1065,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
     } catch (error) {
       Alert.alert(
         languageResource.Alert,
-        languageResource.Something_went_wrong_in_sharing_ratings,
+        languageResource.No_internet_connection,
         [
           {
             text: languageResource.Ok,
@@ -1118,7 +1130,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
             .catch((err) => {
               Alert.alert(
                 languageResource.Alert,
-                languageResource.Something_went_wrong_in_sharing_text,
+                languageResource.No_internet_connection,
                 [
                   {
                     text: languageResource.Ok,
@@ -1132,7 +1144,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
         .catch((err) => {
           Alert.alert(
             languageResource.Alert,
-            languageResource.Something_went_wrong_in_sharing_text,
+            languageResource.No_internet_connection,
             [
               {
                 text: languageResource.Ok,
