@@ -267,11 +267,17 @@ const Resources = {
 export const setLanguage = id => {
   let langID, resource, langName;
   if (id == 1) {
-    (langID = 1), (langName = 'English'), (resource = Resources.English);
+    langID = 1; 
+    langName = 'English';
+    resource = Resources.English;
   } else if (id == 2) {
-    (langID = 2), (resource = Resources.Arabic), (langName = 'Arabic');
+    langID = 2;
+    resource = Resources.Arabic; 
+    langName = 'Arabic';
   } else {
-    (langID = 3), (resource = Resources.Urdu), (langName = 'Urdu');
+    langID = 3;
+    resource = Resources.Urdu;
+    langName = 'Urdu';
   }
   return {
     type: actionTypes.SET_LANGUAGE,
