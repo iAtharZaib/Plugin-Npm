@@ -1,8 +1,9 @@
 import CheckBox from '@react-native-community/checkbox';
 import NetInfo from '@react-native-community/netinfo';
+import { useKeepAwake } from '@unsw-gsbme/react-native-keep-awake/src/index';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  AppState,
+  Alert, AppState,
   Dimensions,
   FlatList,
   Image,
@@ -17,14 +18,13 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
-  Alert,
+  View
 } from 'react-native';
 import AudioRecorderPlayer, {
   AudioEncoderAndroidType,
   AudioSourceAndroidType,
   AVEncoderAudioQualityIOSType,
-  AVEncodingOption,
+  AVEncodingOption
 } from 'react-native-audio-recorder-player';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import DocumentPicker from 'react-native-document-picker';
@@ -37,16 +37,12 @@ import StarRating from 'react-native-star-rating';
 import Icon from 'react-native-vector-icons/dist/Entypo';
 import Video from 'react-native-video';
 import { useSelector } from 'react-redux';
-// import ReactNativeBlobUtil from 'react-native-blob-util';
 import styles from './styles';
-// import axios from 'axios';
-import { useKeepAwake } from '@unsw-gsbme/react-native-keep-awake/src/index';
 const { width, height } = Dimensions.get('window');
 const ProvideFeedback = ({ onClose, lang }) => {
   useKeepAwake();
   const languageResource = useSelector((state) => state.resourcesReducer.resource);
   const feedbackID = useSelector((state) => state.resourcesReducer.feedbackID);
-  // const languageID = useSelector(state => state.resourcesReducer.languageID);
   const [languageID, setlanguageID] = useState(lang);
   const [reviewstate, setreviewstate] = useState(false);
   const [activestate, setactivestate] = useState(0);
@@ -86,12 +82,6 @@ const ProvideFeedback = ({ onClose, lang }) => {
 
   const [attachmentbtndisabled, setattachmentbtndisabled] = useState(false);
 
-  const headers = {
-    Pragma: 'no-cache',
-    'Cache-Control': 'no-cache, no-store, max-age=0, must-revalidate',
-    Accept: 'multipart/form-data; boundary=----WebKitFormBoundaryt0mA6M0xyyBgI2pj',
-    'Content-Type': '*/*',
-  };
   function toggle() {
     setIsActive(!isActive);
   }
@@ -304,7 +294,6 @@ const ProvideFeedback = ({ onClose, lang }) => {
     setrecordingdata(null);
     setfeedbackphoto(null);
     setfeedbacktext('');
-    // setvideodata(null);
     setdocuement();
     setshowrating(false);
     setaudiopreview();
@@ -440,7 +429,6 @@ const ProvideFeedback = ({ onClose, lang }) => {
                           duration: res.assets[0].duration,
                         };
                         setvideodata(videoData);
-                        // postVideoFeedback(videoData);
                       });
                     } else {
                       const videoDataAndroid = {
@@ -528,7 +516,6 @@ const ProvideFeedback = ({ onClose, lang }) => {
                             duration: res.assets[0].duration,
                           };
                           setvideodata(videoData);
-                          // postVideoFeedback(videoData);
                         });
                       } else {
                         const videoDataAndroid = {
@@ -655,7 +642,6 @@ const ProvideFeedback = ({ onClose, lang }) => {
               console.log(
                 'Photo Library feature is not available (on this device / in this context)',
               );
-              // Linking.openSettings();
               break;
             case RESULTS.DENIED:
               console.log(
@@ -677,7 +663,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
           }
         })
         .catch((error) => {
-          // …
+         
         });
     }
     if (Platform.OS == 'ios') {
@@ -733,20 +719,16 @@ const ProvideFeedback = ({ onClose, lang }) => {
       check(PERMISSIONS.IOS.MICROPHONE).then((result) => {
         switch (result) {
           case RESULTS.UNAVAILABLE:
-            // setactivestate(5);
             break;
           case RESULTS.DENIED:
-            // setactivestate(5);
             request(PERMISSIONS.IOS.MICROPHONE);
             break;
           case RESULTS.LIMITED:
-            // setactivestate(5);
             break;
           case RESULTS.GRANTED:
             onStartRecording();
             break;
           case RESULTS.BLOCKED:
-            // setactivestate(5);
             Linking.openSettings();
             break;
         }
@@ -759,11 +741,9 @@ const ProvideFeedback = ({ onClose, lang }) => {
     setPlayTimeraw(0);
 
     setrecording(1);
-    // const dirs = ReactNativeBlobUtil.fs.dirs;
 
     const path = Platform.select({
       ios: 'hello.m4a',
-      // android: `${dirs.CacheDir}/hello.m4a`,
     });
     const audioSet = {
       AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
@@ -1220,7 +1200,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
           <View style={{ width, height }}>
             <Video
               resizeMode="cover"
-              source={{ uri: videodata?.uri }} // Can be a URL or a local file.
+              source={{ uri: videodata?.uri }}
               repeat
               style={{ width: '100%', height: '100%' }}
             />
@@ -1237,12 +1217,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
 
       <SafeAreaView style={[styles.innercont, { right: -20 }]}>
         <TouchableOpacity
-          style={[
-            styles.feedbackButton,
-            {
-              // right: languageID != 1 && Platform.OS == 'ios'  ?  width * 0.075: undefined,
-            },
-          ]}
+          style={styles.feedbackButton}
           onPress={() => {
             onStopPlay();
             if (!feedbackSubmitted) {
@@ -1748,7 +1723,7 @@ const ProvideFeedback = ({ onClose, lang }) => {
                           <Video
                             resizeMode="cover"
                             repeat
-                            source={{ uri: videodata?.uri }} // Can be a URL or a local file.
+                            source={{ uri: videodata?.uri }}
                             style={{ width: '100%', height: '100%' }}
                           />
                         </View>
@@ -1836,7 +1811,6 @@ const ProvideFeedback = ({ onClose, lang }) => {
                               onPausePlay();
                             } else if (activestate == 2) {
                               onStopPlay();
-                              // setvideodata(null);
                               _handlevideo();
                             }
                           }}>
@@ -1900,7 +1874,6 @@ const ProvideFeedback = ({ onClose, lang }) => {
                                           onPausePlay();
                                         } else if (activestate == 2) {
                                           onStopPlay();
-                                          // setvideodata(null);
                                           _handlevideo();
                                         }
                                       }}>

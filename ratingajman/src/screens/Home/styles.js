@@ -6,12 +6,8 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  SmileyImage: {
-    // alignSelf: 'flex-end',
-  },
   ImgCont: {
     justifyContent: 'center',
     alignItems: 'center',
-    // justifyContent: 'flex-start',
   },
 });

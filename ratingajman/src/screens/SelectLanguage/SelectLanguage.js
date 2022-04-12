@@ -3,22 +3,18 @@ import {
   Dimensions,
   FlatList,
   Image,
-  ImageBackground,
-  Platform,
-  Text,
+  ImageBackground, Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFeedbackLanguage } from '../../store/actions';
 import styles from './styles';
-const { width, height } = Dimensions.get('window');
 
 const SelectLanguage = ({ onClose, onLanguageSelect, lang }) => {
   const [selectedId, setSelectedId] = useState();
   const dispatch = useDispatch();
   const languageResource = useSelector((state) => state.resourcesReducer.resource);
-  const languageID = useSelector((state) => state.resourcesReducer.languageID);
   const languages = [
     {
       id: 1,

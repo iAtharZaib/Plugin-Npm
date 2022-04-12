@@ -7,10 +7,8 @@ import ProvideFeedback from './screens/ProvideFeedback/ProvideFeedback';
 import SelectLanguage from './screens/SelectLanguage/SelectLanguage';
 import { setLanguage } from './store/actions';
 import { persistor, store } from './store/store';
-const { height } = Dimensions.get('window');
-let iconPosition = height / 2 - 100;
 
-const FloatingRatingWrapped = ({ lang, top = iconPosition }) => {
+const FloatingRatingWrapped = ({ lang}) => {
   const [step, setStep] = useState(1);
 
   const dispatch = useDispatch();
