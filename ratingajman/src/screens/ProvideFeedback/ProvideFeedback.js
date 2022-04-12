@@ -1700,8 +1700,8 @@ const ProvideFeedback = ({ onClose, lang }) => {
                         <View
                           activeOpacity={1}
                           style={{
-                            width: languageID == 1 ? width * 0.6 : width * 0.6,
-                            height: languageID == 1 ? height * 0.2 : height * 0.19,
+                            width:  width * 0.6,
+                            height:  height * 0.19,
                             borderWidth: videodata ? 1 : 0,
                             alignSelf: 'center',
                           }}>

@@ -133,7 +133,6 @@ export default StyleSheet.create({
     color: 'white',
     bottom: '10%',
     textDecorationLine: 'underline',
-    color: 'black',
   },
   videoView: {
     flex: 1,
@@ -147,7 +146,6 @@ export default StyleSheet.create({
     color: '#fff',
     fontSize: width * 0.045,
     bottom: '15%',
-    color: 'black',
     textDecorationLine: 'underline',
   },
   documentStyling: { width: '100%', height: '100%', alignSelf: 'flex-end' },
