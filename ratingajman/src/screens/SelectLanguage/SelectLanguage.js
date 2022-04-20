@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Dimensions,
   FlatList,
   Image,
   ImageBackground, Text,

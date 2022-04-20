@@ -29,7 +29,7 @@ import AudioRecorderPlayer, {
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
-import { launchCamera } from 'react-native-image-picker';
+import { launchCamera,launchImageLibrary } from 'react-native-image-picker';
 import MovToMp4 from 'react-native-mov-to-mp4';
 import Pdf from 'react-native-pdf';
 import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
@@ -633,6 +633,58 @@ const ProvideFeedback = ({ onClose, lang }) => {
     }
   };
 
+  const _openGallery = async () => {
+    let options = {
+      title: 'Select Image',
+      customButtons: [
+        {
+          name: 'customOptionKey',
+          title: 'Choose Photo from Custom Option',
+        },
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+      quality: 0.4,
+      maxWidth: 500,
+      maxHeight: 500,
+    };
+    launchImageLibrary(options, async (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else { 
+         if  (response.assets.type == 'image/jpeg' ||
+          response.assets.type == 'image/jpg' ||
+          response.assets.type == 'image/png' ||
+          response.assets.type == 'image/heic' ||
+          response.assets[0].type == 'image/jpeg' ||
+          response.assets[0].type == 'image/jpg' ||
+          response.assets[0].type == 'image/png' ||
+          response.assets[0].type == 'image/heic')
+          {
+            setdocuement(response != undefined ? response.assets[0] : response.assets);
+          }
+          else {
+            Alert.alert(
+              languageResource.Alert,
+              languageResource.No_internet_connection,
+              [
+                {
+                  text: languageResource.Ok,
+                  onPress: () => console.log('OK Pressed'),
+                },
+              ],
+            );
+          }
+      }
+    });
+  };
   const onStartCamera = async (photo) => {
     if (Platform.OS === 'android') {
       check(PERMISSIONS.ANDROID.CAMERA)
@@ -1426,8 +1478,30 @@ const ProvideFeedback = ({ onClose, lang }) => {
                                 setpicpreviewmodal(true);
                               }
                             } else {
-                              setattachmentbtndisabled(true);
-                              PickDocument();
+                              setattachmentbtndisabled(true);       
+                              Alert.alert(
+                              languageResource.Add_Attachment,
+                              languageResource.Please_select_an_option,
+                              [
+                                {
+                                  text: languageResource.Choose_from_gallery,
+                                  onPress: () => {
+                                    _openGallery();
+                                  },
+                                },
+                                {
+                                  text: languageResource.Pick_a_document,
+                                  onPress: () => {
+                                    PickDocument();
+                                  },          
+                                },
+                                {
+                                  text: languageResource.Skip,
+                                  onPress: () => console.log("Cancel Pressed"),
+                                  style: "cancel"
+                                }
+                              ],
+                            );
                             }
                           }}>
                           {docuement?.type == 'application/pdf' ? (

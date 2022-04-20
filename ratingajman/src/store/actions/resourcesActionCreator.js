@@ -88,6 +88,9 @@ const Resources = {
     Arabic: 'Arabic',
     Alert: 'Alert',
     Ok: 'Ok',
+    Choose_from_gallery:'Choose from gallery',
+    Pick_a_document:'Pick a Document',
+    Please_select_an_option:"Please select an option"  
   },
   Arabic: {
     Feedback: 'تعليق',
@@ -96,7 +99,7 @@ const Resources = {
     How_was_your_experience: 'كيف كانت تجربتك؟',
     Audio: 'صوتي',
     Video: 'فيديو',
-    Text: 'رسالۃ',
+    Text: 'رسالة',
     Selfie: 'صورة/سيلفي',
     Your_feedback_must_contain_at_least_6_characters:
       'يجب أن تحتوي ملاحظاتك على 6 أحرف على الأقل',
@@ -123,7 +126,7 @@ const Resources = {
       'نحن نأسف لأنك مررت بتجربة سيئة. سنحاول تحسين خدماتنا.',
     Would_you_like_to_attach_any_supporting_documents:
       'هل ترغب في إرفاق أي مستندات داعمة؟',
-    Skip: 'يتخطى',
+    Skip: 'تخطي',
     Attachments_should_be_of_type_png_jpg_and_PDF_and_should_be_less_than_5_MBs_in_size:
       'يجب أن يكون المرفق من النوع PNG ، و JPG ، و PDF ، ويجب أن يكون الحد الأقصى للحجم أقل من 5 ميجا بايت',
     Next_Send: 'التالي',
@@ -170,6 +173,9 @@ const Resources = {
     Arabic: 'العربية',
     Alert: 'تنبیه',
     Ok: 'تم',
+    Choose_from_gallery:'اختر من المعرض',
+    Pick_a_document:'اختر مستندًا',
+    Please_select_an_option:"الرجاء تحديد خيار"
   },
   Urdu: {
     Feedback: 'اظہار رائے',
@@ -261,6 +267,9 @@ const Resources = {
     Arabic: 'عربی',
     Alert: 'تنبیه',
     Ok: 'ٹھیک ہے',
+    Choose_from_gallery:'گیلری سے منتخب کریں',
+    Pick_a_document:'ایک دستاویز چنیں۔',
+    Please_select_an_option:"براہ کرم ایک آپشن منتخب کریں۔"
   },
 };
 
